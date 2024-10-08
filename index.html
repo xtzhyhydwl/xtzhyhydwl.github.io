@@ -69,6 +69,91 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-hexo插入图片测试之二" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/10/08/hexo%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95%E4%B9%8B%E4%BA%8C/" class="article-date">
+  <time class="dt-published" datetime="2024-10-08T15:30:50.000Z" itemprop="datePublished">2024-10-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/10/08/hexo%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95%E4%B9%8B%E4%BA%8C/">hexo插入图片测试之二</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>书接上文，我已经看到hexo为我创建了一个与post同名的文件夹用来存放asset，现在复制图片进去并且使用推荐格式引用：<code>![](image.jpg)</code><br><img src="/2024/10/08/hexo%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95%E4%B9%8B%E4%BA%8C/orangestar.jpg"></p>
+<p>从本地预览来看图片插入成功，现在尝试引用一个不存在的图片：<br><img src="/picture_dosent_exists.jpg"><br>果然是裂开的图片。</p>
+<p>本地预览来看图片占满整个post宽度，有时候我并不想看到这样，是不是与分辨率有关？插入低分辨率图片试试：<br><img src="/2024/10/08/hexo%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95%E4%B9%8B%E4%BA%8C/low_resolution_Mikansei.png"><br>还真是，不过这次图片又居中了哈哈，我虽然也不一定想要这样，但是先停止无穷无尽地探索吧。本地预览效果不错，但是部署到远端是不是有一样的效果呢？现在就部署。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/10/08/hexo%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95%E4%B9%8B%E4%BA%8C/" data-id="cm20lzs3n0004bgtm8x2bfxg0" data-title="hexo插入图片测试之二" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-hexo博客中插入图片测试" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/10/08/hexo%E5%8D%9A%E5%AE%A2%E4%B8%AD%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95/" class="article-date">
+  <time class="dt-published" datetime="2024-10-08T15:12:06.000Z" itemprop="datePublished">2024-10-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2024/10/08/hexo%E5%8D%9A%E5%AE%A2%E4%B8%AD%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95/">hexo博客中插入图片测试</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>我使用的是obsidian来编辑的markdown文件，现在尝试直接插入图片，看看hexo能不能识别：<br>![[orangestar.jpg]]<br>并不能识别，看来这个格式是obsidian专属的识别格式。</p>
+<p>现在尝试使用hexo官方文档中给出的格式：<code>![](image.jpg)</code><br><img src="/orangestar.jpg"><br>这个格式obsidian也能解析出来来着，但是图片裂开了。估计是路径找不到。</p>
+<p>完整阅读文档后发现还需要再config文件中配置相应参数才能自由地方便地插入图片。现在开启试试。</p>
+<p>在<code>_config.yml</code>中配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: true  //自动创建每个post对应的asset文件夹</span><br><span class="line"></span><br><span class="line">marked:  </span><br><span class="line">  prependRoot: true  </span><br><span class="line">  postAsset: true        //自动解析图片地址</span><br></pre></td></tr></table></figure>
+<p>新开文件才有效，新开一个试试。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/10/08/hexo%E5%8D%9A%E5%AE%A2%E4%B8%AD%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95/" data-id="cm20lzs3i0002bgtm6o1t26xe" data-title="hexo博客中插入图片测试" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-10-8-2024-早上上了传感器的课程" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2024/10/08/10-8-2024-%E6%97%A9%E4%B8%8A%E4%B8%8A%E4%BA%86%E4%BC%A0%E6%84%9F%E5%99%A8%E7%9A%84%E8%AF%BE%E7%A8%8B/" class="article-date">
@@ -118,7 +203,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2024/10/08/10-8-2024-%E6%97%A9%E4%B8%8A%E4%B8%8A%E4%BA%86%E4%BC%A0%E6%84%9F%E5%99%A8%E7%9A%84%E8%AF%BE%E7%A8%8B/" data-id="cm1zwqreq0000h0tmc31k7fc1" data-title="10.8.2024 早上上了传感器的课程" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2024/10/08/10-8-2024-%E6%97%A9%E4%B8%8A%E4%B8%8A%E4%BA%86%E4%BC%A0%E6%84%9F%E5%99%A8%E7%9A%84%E8%AF%BE%E7%A8%8B/" data-id="cm20lzs3c0000bgtmbdlq43cl" data-title="10.8.2024 早上上了传感器的课程" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -160,7 +245,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2024/10/07/%E5%9B%BD%E5%BA%86%E7%9A%84%E6%8C%A3%E6%89%8E/" data-id="cm1zwqrew0003h0tmesxi3i8a" data-title="国庆的挣扎" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2024/10/07/%E5%9B%BD%E5%BA%86%E7%9A%84%E6%8C%A3%E6%89%8E/" data-id="cm20lzs3q0006bgtmamhq0mav" data-title="国庆的挣扎" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -199,7 +284,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2024/09/29/hexo%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/" data-id="cm1zwqrev0002h0tmhphfefi9" data-title="hexo基本命令" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2024/09/29/hexo%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/" data-id="cm20lzs3m0003bgtmem1x1gqr" data-title="hexo基本命令" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -240,7 +325,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2024/09/29/%E5%A4%8F%E8%BF%9C%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" data-id="cm1zwqrex0004h0tm27xm9s1r" data-title="夏远的第一篇博客" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2024/09/29/%E5%A4%8F%E8%BF%9C%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" data-id="cm20lzs3p0005bgtm3ejzhmge" data-title="夏远的第一篇博客" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -291,7 +376,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2024/09/29/hello-world/" data-id="cm1zwqreu0001h0tmghq3c80o" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2024/09/29/hello-world/" data-id="cm20lzs3g0001bgtmh51y6u8w" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -334,6 +419,14 @@
       <ul>
         
           <li>
+            <a href="/2024/10/08/hexo%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95%E4%B9%8B%E4%BA%8C/">hexo插入图片测试之二</a>
+          </li>
+        
+          <li>
+            <a href="/2024/10/08/hexo%E5%8D%9A%E5%AE%A2%E4%B8%AD%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95/">hexo博客中插入图片测试</a>
+          </li>
+        
+          <li>
             <a href="/2024/10/08/10-8-2024-%E6%97%A9%E4%B8%8A%E4%B8%8A%E4%BA%86%E4%BC%A0%E6%84%9F%E5%99%A8%E7%9A%84%E8%AF%BE%E7%A8%8B/">10.8.2024 早上上了传感器的课程</a>
           </li>
         
@@ -343,14 +436,6 @@
         
           <li>
             <a href="/2024/09/29/hexo%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/">hexo基本命令</a>
-          </li>
-        
-          <li>
-            <a href="/2024/09/29/%E5%A4%8F%E8%BF%9C%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">夏远的第一篇博客</a>
-          </li>
-        
-          <li>
-            <a href="/2024/09/29/hello-world/">Hello World</a>
           </li>
         
       </ul>
