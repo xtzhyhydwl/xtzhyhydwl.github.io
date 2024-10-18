@@ -193,7 +193,7 @@
   const ipt = document.querySelector('#search-input')
   const btn = document.querySelector('#search-btn')
   const layer = document.querySelector('#search-layer')
-  const posts = JSON.parse(`[{"title":"10.14.2024 总结","path":"2024/10/15/10-14-2024-总结/"},{"title":"10.10.2024凌晨 熬夜看比赛之反思","path":"2024/10/10/10-10-2024凌晨-熬夜看比赛之反思/"},{"title":"10.15.2024 总结 10.16.2024要做的事","path":"2024/10/16/10-15-2024-总结-10-16-2024要做的事/"},{"title":"10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性","path":"2024/10/16/10-15-2024学到的东西-关于-人生堆栈-项目落地的急迫性/"},{"title":"10.16.2024学到的东西，第二天要做的事情","path":"2024/10/17/10-16-2024学到的东西，第二天要做的事情/"},{"title":"10.16.2024总结","path":"2024/10/17/10-16-2024总结/"},{"title":"10.8.2024 总结","path":"2024/10/08/10-8-2024-总结/"},{"title":"Hello World","path":"2024/09/29/hello-world/"},{"title":"hexo之还是想把博客的tag搞起来 10.16.2024晚","path":"2024/10/16/hexo之还是想把博客的tag搞起来-10-16-2024晚/"},{"title":"hexo博客中插入图片测试","path":"2024/10/08/hexo博客中插入图片测试/"},{"title":"10.8.2024 早上上了传感器的课程","path":"2024/10/08/10-8-2024-早上上了传感器的课程/"},{"title":"hexo插入图片测试之二","path":"2024/10/08/hexo插入图片测试之二/"},{"title":"hexo基本命令","path":"2024/09/29/hexo基本命令/"},{"title":"hexo更改主题，以及修改主题的实践","path":"2024/10/11/hexo更改主题，以及修改主题的实践/"},{"title":"夏远的第一篇博客","path":"2024/09/29/夏远的第一篇博客/"},{"title":"国庆的挣扎","path":"2024/10/07/国庆的挣扎/"},{"title":"整理桌面，顺便换一张壁纸","path":"2024/10/11/整理桌面，顺便换一张壁纸/"},{"title":"我急需审视自己的一些东西","path":"2024/10/14/我急需审视自己的一些东西/"},{"title":"迟到的10.10.2024总结","path":"2024/10/11/迟到的10-10-2024总结/"},{"title":"过去两天的总结，以及今天的计划","path":"2024/10/14/过去两天的总结，以及今天的计划/"}]`)
+  const posts = JSON.parse(`[{"title":"10.10.2024凌晨 熬夜看比赛之反思","path":"2024/10/10/10-10-2024凌晨-熬夜看比赛之反思/"},{"title":"10.14.2024 总结","path":"2024/10/15/10-14-2024-总结/"},{"title":"10.15.2024 总结 10.16.2024要做的事","path":"2024/10/16/10-15-2024-总结-10-16-2024要做的事/"},{"title":"10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性","path":"2024/10/16/10-15-2024学到的东西-关于-人生堆栈-项目落地的急迫性/"},{"title":"10.16.2024学到的东西，第二天要做的事情","path":"2024/10/17/10-16-2024学到的东西，第二天要做的事情/"},{"title":"10.16.2024总结","path":"2024/10/17/10-16-2024总结/"},{"title":"10.178.2024学到的东西和今天要做的事情","path":"2024/10/18/10-17-2024学到的东西和今天要做的事情/"},{"title":"10.17.2024总结","path":"2024/10/18/10-17-2024总结/"},{"title":"10.8.2024 总结","path":"2024/10/08/10-8-2024-总结/"},{"title":"10.8.2024 早上上了传感器的课程","path":"2024/10/08/10-8-2024-早上上了传感器的课程/"},{"title":"Hello World","path":"2024/09/29/hello-world/"},{"title":"hexo之还是想把博客的tag搞起来 10.16.2024晚","path":"2024/10/16/hexo之还是想把博客的tag搞起来-10-16-2024晚/"},{"title":"hexo博客中插入图片测试","path":"2024/10/08/hexo博客中插入图片测试/"},{"title":"hexo基本命令","path":"2024/09/29/hexo基本命令/"},{"title":"hexo插入图片测试之二","path":"2024/10/08/hexo插入图片测试之二/"},{"title":"hexo更改主题，以及修改主题的实践","path":"2024/10/11/hexo更改主题，以及修改主题的实践/"},{"title":"国庆的挣扎","path":"2024/10/07/国庆的挣扎/"},{"title":"夏远的第一篇博客","path":"2024/09/29/夏远的第一篇博客/"},{"title":"我急需审视自己的一些东西","path":"2024/10/14/我急需审视自己的一些东西/"},{"title":"整理桌面，顺便换一张壁纸","path":"2024/10/11/整理桌面，顺便换一张壁纸/"},{"title":"过去两天的总结，以及今天的计划","path":"2024/10/14/过去两天的总结，以及今天的计划/"},{"title":"迟到的10.10.2024总结","path":"2024/10/11/迟到的10-10-2024总结/"}]`)
   ipt.addEventListener('keyup', e => {
     if (e.key === 'Enter') {
       handleSearch()
@@ -327,7 +327,7 @@
       </h5>
       <p class="main-left--subtitle">
         <span>文章数目：</span>
-        <span>20 篇</span>
+        <span>22 篇</span>
       </p>
       <p class="main-left--subtitle">
         <span>最近动态：</span>
@@ -335,7 +335,7 @@
       </p>
       <p class="main-left--subtitle">
         <span>上线时间：</span>
-        <span>19天</span>
+        <span>20天</span>
       </p>
       <p class="main-left--subtitle">
         <span>当前版本：</span>
@@ -354,15 +354,15 @@
       <div class="index-article">
         <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
         <div class="index-article--box">
-          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.16.2024总结" />
+          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.178.2024学到的东西和今天要做的事情" />
         </div>
         <div class="index-article--content">
-          <a href="/2024/10/17/10-16-2024%E6%80%BB%E7%BB%93/">10.16.2024总结 </a>
+          <a href="/2024/10/18/10-17-2024%E5%AD%A6%E5%88%B0%E7%9A%84%E4%B8%9C%E8%A5%BF%E5%92%8C%E4%BB%8A%E5%A4%A9%E8%A6%81%E5%81%9A%E7%9A%84%E4%BA%8B%E6%83%85/">10.178.2024学到的东西和今天要做的事情 </a>
           <div>
             
             
               <p>
-                <a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
+                <a class="-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a><span> ◆ </span><a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
               </p>
             
           </div>
@@ -373,15 +373,15 @@
       <div class="index-article">
         <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
         <div class="index-article--box">
-          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.15.2024 总结 10.16.2024要做的事" />
+          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.16.2024学到的东西，第二天要做的事情" />
         </div>
         <div class="index-article--content">
-          <a href="/2024/10/16/10-15-2024-%E6%80%BB%E7%BB%93-10-16-2024%E8%A6%81%E5%81%9A%E7%9A%84%E4%BA%8B/">10.15.2024 总结 10.16.2024要做的事 </a>
+          <a href="/2024/10/17/10-16-2024%E5%AD%A6%E5%88%B0%E7%9A%84%E4%B8%9C%E8%A5%BF%EF%BC%8C%E7%AC%AC%E4%BA%8C%E5%A4%A9%E8%A6%81%E5%81%9A%E7%9A%84%E4%BA%8B%E6%83%85/">10.16.2024学到的东西，第二天要做的事情 </a>
           <div>
             
             
               <p>
-                <a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
+                <a class="-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a><span> ◆ </span><a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
               </p>
             
           </div>
@@ -391,66 +391,6 @@
     
       <div class="index-article">
         <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
-        <div class="index-article--box">
-          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="我急需审视自己的一些东西" />
-        </div>
-        <div class="index-article--content">
-          <a href="/2024/10/14/%E6%88%91%E6%80%A5%E9%9C%80%E5%AE%A1%E8%A7%86%E8%87%AA%E5%B7%B1%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/">我急需审视自己的一些东西 </a>
-          <div>
-            
-            
-              <p>
-                <a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
-              </p>
-            
-          </div>
-          <div class="bg"></div>
-        </div>
-      </div>
-    
-      <div class="index-article">
-        <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
-        <div class="index-article--box">
-          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="迟到的10.10.2024总结" />
-        </div>
-        <div class="index-article--content">
-          <a href="/2024/10/11/%E8%BF%9F%E5%88%B0%E7%9A%8410-10-2024%E6%80%BB%E7%BB%93/">迟到的10.10.2024总结 </a>
-          <div>
-            
-            
-              <p>
-                <a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
-              </p>
-            
-          </div>
-          <div class="bg"></div>
-        </div>
-      </div>
-    
-      <div class="index-article">
-        <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
-        <div class="index-article--box">
-          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.8.2024 总结" />
-        </div>
-        <div class="index-article--content">
-          <a href="/2024/10/08/10-8-2024-%E6%80%BB%E7%BB%93/">10.8.2024 总结 </a>
-          <div>
-            
-            
-              <p>
-                <a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
-              </p>
-            
-          </div>
-          <div class="bg"></div>
-        </div>
-      </div>
-    
-  </div>
-  <div class="index-center">
-    
-      <div class="index-article">
-        <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
         <div class="index-article--box">
           <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性" />
         </div>
@@ -460,7 +400,7 @@
             
             
               <p>
-                <a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
+                <a class="-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a><span> ◆ </span><a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
               </p>
             
           </div>
@@ -469,7 +409,7 @@
       </div>
     
       <div class="index-article">
-        <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
+        <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
         <div class="index-article--box">
           <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.14.2024 总结" />
         </div>
@@ -488,7 +428,7 @@
       </div>
     
       <div class="index-article">
-        <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
+        <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
         <div class="index-article--box">
           <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="过去两天的总结，以及今天的计划" />
         </div>
@@ -506,13 +446,16 @@
         </div>
       </div>
     
+  </div>
+  <div class="index-center">
+    
       <div class="index-article">
         <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
         <div class="index-article--box">
-          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.10.2024凌晨 熬夜看比赛之反思" />
+          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.17.2024总结" />
         </div>
         <div class="index-article--content">
-          <a href="/2024/10/10/10-10-2024%E5%87%8C%E6%99%A8-%E7%86%AC%E5%A4%9C%E7%9C%8B%E6%AF%94%E8%B5%9B%E4%B9%8B%E5%8F%8D%E6%80%9D/">10.10.2024凌晨 熬夜看比赛之反思 </a>
+          <a href="/2024/10/18/10-17-2024%E6%80%BB%E7%BB%93/">10.17.2024总结 </a>
           <div>
             
             
@@ -528,10 +471,67 @@
       <div class="index-article">
         <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
         <div class="index-article--box">
-          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="国庆的挣扎" />
+          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.16.2024总结" />
         </div>
         <div class="index-article--content">
-          <a href="/2024/10/07/%E5%9B%BD%E5%BA%86%E7%9A%84%E6%8C%A3%E6%89%8E/">国庆的挣扎 </a>
+          <a href="/2024/10/17/10-16-2024%E6%80%BB%E7%BB%93/">10.16.2024总结 </a>
+          <div>
+            
+            
+              <p>
+                <a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
+              </p>
+            
+          </div>
+          <div class="bg"></div>
+        </div>
+      </div>
+    
+      <div class="index-article">
+        <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
+        <div class="index-article--box">
+          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.15.2024 总结 10.16.2024要做的事" />
+        </div>
+        <div class="index-article--content">
+          <a href="/2024/10/16/10-15-2024-%E6%80%BB%E7%BB%93-10-16-2024%E8%A6%81%E5%81%9A%E7%9A%84%E4%BA%8B/">10.15.2024 总结 10.16.2024要做的事 </a>
+          <div>
+            
+            
+              <p>
+                <a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
+              </p>
+            
+          </div>
+          <div class="bg"></div>
+        </div>
+      </div>
+    
+      <div class="index-article">
+        <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
+        <div class="index-article--box">
+          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="我急需审视自己的一些东西" />
+        </div>
+        <div class="index-article--content">
+          <a href="/2024/10/14/%E6%88%91%E6%80%A5%E9%9C%80%E5%AE%A1%E8%A7%86%E8%87%AA%E5%B7%B1%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF/">我急需审视自己的一些东西 </a>
+          <div>
+            
+            
+              <p>
+                <a class="-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
+              </p>
+            
+          </div>
+          <div class="bg"></div>
+        </div>
+      </div>
+    
+      <div class="index-article">
+        <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
+        <div class="index-article--box">
+          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="迟到的10.10.2024总结" />
+        </div>
+        <div class="index-article--content">
+          <a href="/2024/10/11/%E8%BF%9F%E5%88%B0%E7%9A%8410-10-2024%E6%80%BB%E7%BB%93/">迟到的10.10.2024总结 </a>
           <div>
             
             
@@ -549,13 +549,13 @@
     <div class="index-right-wrapper">
       
       <ul class="tags" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE/" rel="tag">博客建设</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a></li></ul>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">2024年10月</a><span class="archive-list-count">17</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/09/">2024年09月</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">2024年10月</a><span class="archive-list-count">19</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/09/">2024年09月</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 </div>
 
   <div class="page">
-    <span class="page-number current">1</span>
+    <span class="page-number current">1</span><a class="page-number" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/page/2/">2</a><a class="extend next" rel="next" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/page/2/">&gt;</a>
   </div>
 
 
