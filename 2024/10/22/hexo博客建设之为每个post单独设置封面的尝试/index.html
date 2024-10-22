@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>夏远的个人主页——10.21.2024学到的东西 &amp; 今天要做的事情 | Hexo</title>
+  <title>夏远的个人主页——hexo博客建设之为每个post单独设置封面的尝试 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/xiayuan_icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/public.css" />
@@ -16,7 +16,7 @@
 
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `夏远的个人主页——10.21.2024学到的东西 & 今天要做的事情`
+    document.title = `夏远的个人主页——hexo博客建设之为每个post单独设置封面的尝试`
   </script>
 <meta name="generator" content="Hexo 7.3.0"></head>
 
@@ -351,7 +351,7 @@
 
 <div class="article-container">
   <div class="article">
-    <h1 class="article-title">10.21.2024学到的东西 & 今天要做的事情</h1>
+    <h1 class="article-title">hexo博客建设之为每个post单独设置封面的尝试</h1>
     <div class="article-info">
       <div class="article-info--item">
         <div class="article-info--info">
@@ -364,28 +364,18 @@
           
           <div class="article-info--tags">
             <span>标签：</span>
-            <a class="tag-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
+            <a class="tag-link" href="/tags/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE/" rel="tag">博客建设</a>
           </div>
           
-          <p class="article-info--date">日期：2024-10-22 07:07:26</p>
+          <p class="article-info--date">日期：2024-10-22 18:06:01</p>
         </div>
-        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
+        <img src="/images%5Ccovers%5CVA-11%20HALL-A%20.jpg" alt="" class="article-cover">
       </div>
     </div>
     <article class="article-content markdown-body">
-      <h5 id="学到的东西"><a href="#学到的东西" class="headerlink" title="学到的东西"></a>学到的东西</h5><ol>
-<li>计算机、树莓派这些东西，有些时候老是报错，其实重启一下就好。。重启有一个好处，就是会重新分配内存，将之前运行程序的时候在内存中产生的内存碎片整合起来（由于反复申请释放内存造成的）。有些程序可能就缺这么点内存，还不告诉你。。</li>
-<li>学了一些用python进行数据规约、非数值数据编码的知识，主要包括了panda库中对df的一些方法(.groupby(), .mean(), .apply())、正则表达式筛选数字字符从而将字符串转换为数字、lambda函数、一些外部函数引用技巧。</li>
-<li>去上数据挖掘课，学到一些了基于支持度-置信度模型的频繁模式分析的算法，Apriori和FP-tree，没学懂，还得再看看。还学了数据挖掘中分类和决策树的概念，收获很大，为我的课程设计指明了方向</li>
-</ol>
-<h5 id="今天要做的事情"><a href="#今天要做的事情" class="headerlink" title="今天要做的事情"></a>今天要做的事情</h5><ol>
-<li>把大衣送去干洗</li>
-<li>规划智能嵌入式高阶目标做什么、怎么做</li>
-<li>写智能嵌入式报告</li>
-<li>洗点衣服</li>
-<li>学习一点随机信号分析，准备写作业</li>
-<li>晚上骑车，冲刺！冲刺！</li>
-</ol>
+      <h4 id="自己摸索阶段"><a href="#自己摸索阶段" class="headerlink" title="自己摸索阶段"></a>自己摸索阶段</h4><p>封面问题一直困扰着我，我的思路是在负责生成对应html文件的ejs文件那里，找到每次渲染网页的时候，post封面这个部分是用哪个路径路径的图片渲染的。也就是说我默认了一个图片想要成为post的cover，是要存放在固定文件夹、有固定图片格式和命名规则的。这个思路和我更换网页背景图片的思路一脉相承，听起来很合理不是吗？<br>于是我下载了webstorm，虽然没有一点JavaScript功底但是硬看，期间还看了一点html，只为找到那个路径和命名。<br>寻找过程中我知道默认封面的名字为<code>default_cover</code>，我猜自定义cover的路径会和默认封面的路径并列存在，所以我直接在每一个ejs文件中搜索<code>default_cover</code>。果然经验是正确的，自定义封面和默认封面在一句代码里被同时提及，但是这个自定义封面的引用形式并不是我想象中的…&#x2F;somefolder&#x2F;cover.png这样的形式，而是一个干巴巴的post.cover。<br>所有人都能一眼看出，哦这是一个专属于这个post的封面，但是美中不足的是，我还是不知道我该怎么把一个图片设置为所谓的post.cover。<br>我猜测post是一个class之类的，只要找到其定义，就可以知道它接收那种格式的参数，就还有操作空间。于是我找啊找，钻破头地去找关于post的定义，结果一无所获，整个blog文件里就没有python或者c++里那种一个类别的明确的定义。</p>
+<h4 id="被ai一点通了"><a href="#被ai一点通了" class="headerlink" title="被ai一点通了"></a>被ai一点通了</h4><p>实在无奈，截了一段包含利用post.cover给post设置封面的esj代码片段，喂给ai请它帮忙解读。本来我是没抱希望的，但是我刚刚提出我想换封面，它就告诉我，这个post.cover，以及和post有关的例如post.title、post.category，是在文章开头的esj代码段里定义的。<br>所以其实我一直在找esj文件里的关于post的定义，没想到它是在每一篇post.md里定义的。我立马感叹学艺不精，还得多练。我在看一种于我而言全新的代码，它很灵活，我切不能被以前看c代码获取的经验套住了。</p>
+<h4 id="现在尝试换封面"><a href="#现在尝试换封面" class="headerlink" title="现在尝试换封面"></a>现在尝试换封面</h4><p>扯了那么多我的探索，现在是时候试一下ai说的更换封面的方法了！<br><img src="/2024/10/22/hexo%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE%E4%B9%8B%E4%B8%BA%E6%AF%8F%E4%B8%AApost%E5%8D%95%E7%8B%AC%E8%AE%BE%E7%BD%AE%E5%B0%81%E9%9D%A2%E7%9A%84%E5%B0%9D%E8%AF%95/ai-cover.png"></p>
 
     </article>
     
@@ -394,20 +384,15 @@
     <div class="article-catelogue--wrapper">
       <div class="catelogue catelogue-1">
         <h3>目录</h3>
-        <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AD%A6%E5%88%B0%E7%9A%84%E4%B8%9C%E8%A5%BF"><span class="toc-number">1.</span> <span class="toc-text">学到的东西</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%8A%E5%A4%A9%E8%A6%81%E5%81%9A%E7%9A%84%E4%BA%8B%E6%83%85"><span class="toc-number">2.</span> <span class="toc-text">今天要做的事情</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%B7%B1%E6%91%B8%E7%B4%A2%E9%98%B6%E6%AE%B5"><span class="toc-number">1.</span> <span class="toc-text">自己摸索阶段</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A2%ABai%E4%B8%80%E7%82%B9%E9%80%9A%E4%BA%86"><span class="toc-number">2.</span> <span class="toc-text">被ai一点通了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%B0%E5%9C%A8%E5%B0%9D%E8%AF%95%E6%8D%A2%E5%B0%81%E9%9D%A2"><span class="toc-number">3.</span> <span class="toc-text">现在尝试换封面</span></a></li></ol>
       </div>
       
         <div class="catelogue catelogue-2">
-          
-            <p>
-              <span>上一篇：</span>
-              <a href="/2024/10/22/hexo博客建设之为每个post单独设置封面的尝试/">hexo博客建设之为每个post单独设置封面的尝试</a>
-            </p>
            
           
             <p>
               <span>下一篇</span>
-              <a href="/2024/10/22/10-21-2024总结/">10.21.2024总结</a>
+              <a href="/2024/10/22/10-21-2024学到的东西-今天要做的事情/">10.21.2024学到的东西 & 今天要做的事情</a>
             </p>
           
         </div>
