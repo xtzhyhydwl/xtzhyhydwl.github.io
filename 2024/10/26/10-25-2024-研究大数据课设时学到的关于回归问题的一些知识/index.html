@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>夏远的个人主页——国庆的挣扎 | Hexo</title>
+  <title>夏远的个人主页——10.25.2024 研究大数据课设时学到的关于回归问题的一些知识 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/xiayuan_icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/public.css" />
@@ -16,7 +16,7 @@
 
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `夏远的个人主页——国庆的挣扎`
+    document.title = `夏远的个人主页——10.25.2024 研究大数据课设时学到的关于回归问题的一些知识`
   </script>
 <meta name="generator" content="Hexo 7.3.0"></head>
 
@@ -351,7 +351,7 @@
 
 <div class="article-container">
   <div class="article">
-    <h1 class="article-title">国庆的挣扎</h1>
+    <h1 class="article-title">10.25.2024 研究大数据课设时学到的关于回归问题的一些知识</h1>
     <div class="article-info">
       <div class="article-info--item">
         <div class="article-info--info">
@@ -364,19 +364,69 @@
           
           <div class="article-info--tags">
             <span>标签：</span>
-            <a class="tag-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
+            <a class="tag-link" href="/tags/python/" rel="tag">python</a><a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a>
           </div>
           
-          <p class="article-info--date">日期：2024-10-07 17:38:10</p>
+          <p class="article-info--date">日期：2024-10-26 10:32:25</p>
         </div>
-        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
+        <img src="/images/covers/pythonMeme1" alt="" class="article-cover">
       </div>
     </div>
     <article class="article-content markdown-body">
-      <p>有一堆作业和一堆想做的事情，却在真正下手做之前犹豫和徘徊，浪费了国庆假期绝大多数时间。</p>
-<p>背单词的计划歇菜了，打字练习坚持不下去了。这两件事十分简单但是具有建设性，我只满足于现有的单词储备，只满足于一分钟打30个单词的输入速度，所以放弃了。</p>
-<p>以后每天在博客打卡吧，学了什么做了什么，这里暂时是独属于我一个人的互联网的隐秘角落。总有一天我走出去的时候，这个网站也会走出去；或者反过来说，这个网站为人所知时，我也会走出自暴自弃的阴霾吧。</p>
-<p>接下来的任务是<strong>随机信号分析</strong>第二章自学与做作业。第二章开始真正研究一个随机信号的特性 特征，以及如何捕捉这些特征。从随机正弦信号入手，我第一次体会到一个幅度频率相位都是随机变量的函数是多么让人头大，概率论本来就是我的梦魇。。这就是现实情况下会遇见的信号，我必须面对并且学懂它。</p>
+      <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>个人总结系列将不会再更新，这个个人博客上主要是记录学习内容了。因为我写东西总会想象以后有人看的时候，大家的观感是什么样的，所以我会写的比较做作。个人总结还好，只是加工过去发生过的东西并不会造成什么实际影响，但是今日计划这种，就容易沾上点怪味，制定的计划并不是完全合理的，而是带有一些夸张成分。遂将这部分移除。并不是说就不写了，我每天早上仍然会写总结和计划，只是放在幕后供我自己参考，也可以写进一些涉及个人隐私的事情。<br>过去十多天在博客上更新个人总结的经历确实让我进步很大，因为自我反思比以前都深刻和具体；也让我养成了这样一个好习惯，我相信这个习惯会一直助力我今后的学习生活。</p>
+<h4 id="学习经过"><a href="#学习经过" class="headerlink" title="学习经过"></a>学习经过</h4><p>我这学期大数据挖掘课的课设内容是给定一个原始数据集，和一个既定目标，完成数据处理、挖掘、分析、产出成果等小目标。我的数据是五百多个条目，每个条目描述一个可穿戴设备，属性包含名称，价格，产地，佩戴部位，用途，这些是我认为和目标相关的属性，还有一些无关紧要的属性，总的有十多种。<br>数据挖掘的目标是根据除了价格以外的属性，给出一个可穿戴设备的属性，推测其价格。本质上是一个回归问题。之前在课上看到了决策树这个方法，就想先尝试一下。其实我懂的还很少，所以求助于ai，在期间学到了很多知识，想记录下来。这个回过头去记录的过程也是一种复习和重新获得感悟的过程。</p>
+<h5 id="数据处理部分"><a href="#数据处理部分" class="headerlink" title="数据处理部分"></a>数据处理部分</h5><p>昨天以前对数据做过一些处理，但是没有做可视化，也没有处理干净。其实后续发现有一些问题，都陆续修复了。<br>学到的知识是一些和python相关的东西，从时间线上来讲，我应该先讲讲pycharm的破解部分，因为昨天早上我刚刚想打开工程，发现我的pycharm没证书了。</p>
+<h6 id="pycharm破解"><a href="#pycharm破解" class="headerlink" title="pycharm破解"></a>pycharm破解</h6><p>其实很简单，只要有梯子，没有梯子就麻烦一点。</p>
+<ol>
+<li>访问这个网址，下载jetbra.zip：<a target="_blank" rel="noopener" href="https://ipfs.io/ipfs/bafybeih65no5dklpqfe346wyeiak6wzemv5d7z2ya7nssdgwdz4xrmdu6i/">Some keys for testing - jetbra.in</a></li>
+<li>同时也是那个网站内，复制pycharm的激活码</li>
+<li>按照下载的压缩包里的readme.txt文件的步骤一步步来就可以激活成功<br>按我的理解，这个破解的思路是通过不连接jetbrain账户云端，修改本地文件，让软件的证书系统认可这个可以说是作者自己编的证书密钥，从而达到破解的效果。如果没有用脚本修改本地文件，原版的pycharm是不会认这个网站提供的密钥的。我还破解过webstorm，原理也是同理。</li>
+</ol>
+<p>中途遇到一个问题，输入完证书以后有一个弹窗：<br><img src="/2024/10/26/10-25-2024-%E7%A0%94%E7%A9%B6%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AF%BE%E8%AE%BE%E6%97%B6%E5%AD%A6%E5%88%B0%E7%9A%84%E5%85%B3%E4%BA%8E%E5%9B%9E%E5%BD%92%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86/pycharmError.png"><br>出现这个问题后，pycharm能正常使用，但是退出一次以后再打开，证书失效又要激活一次证书，激活以后再次弹出弹窗。也就是说pycharm不是不认，而是它无法保存这个密钥。<br>解决方法是找到这个路径里的这个.key文件，直接删除就好，再次注册证书的时候就不会再弹出，永久激活成功。导致这个错误的原因我不是很确定了。</p>
+<p>接下来讲讲我学到python知识，以及一些感悟。</p>
+<h6 id="学到的python知识"><a href="#学到的python知识" class="headerlink" title="学到的python知识"></a>学到的python知识</h6><ol>
+<li><p>方差分析相关代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> f_oneway</span><br><span class="line"><span class="comment"># Group the target values based on the unique categories of the feature</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">perform_anova</span>(<span class="params">data, feature, target</span>):</span><br><span class="line">	groups = [data[target][data[feature] == category] <span class="keyword">for</span> category <span class="keyword">in</span> data[feature].unique()] </span><br><span class="line">	<span class="comment"># Perform ANOVA </span></span><br><span class="line">	anova_result = f_oneway(*groups) </span><br><span class="line">	<span class="comment"># Return the p-value and F-statistic </span></span><br><span class="line">	<span class="keyword">return</span> anova_result.pvalue, anova_result.statistic</span><br></pre></td></tr></table></figure>
+<p>使用scipy库，这个库是python中用来进行科学计算的库，给人一种很专业的感觉（<br>具体语句特别是groups那一句，还不是很清楚，想继续问问这一句。但是这个函数是现成的，好用。</p>
+</li>
+<li><p>关于在dataframe中复制数据的方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 复制数据并分别赋值到‘Lifestyle’和‘Fitness’</span></span><br><span class="line">additional_data = data[data[<span class="string">&#x27;category&#x27;</span>] == <span class="string">&#x27;Lifestyle, Fitness&#x27;</span>].copy()</span><br><span class="line">additional_data[<span class="string">&#x27;category&#x27;</span>] = <span class="string">&#x27;Lifestyle&#x27;</span></span><br><span class="line">data[<span class="string">&#x27;category&#x27;</span>].replace(<span class="string">&#x27;Lifestyle, Fitness&#x27;</span>, <span class="string">&#x27;Fitness&#x27;</span>, inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将新的数据行添加到数据集中</span></span><br><span class="line">data = pd.concat([data, additional_data], ignore_index=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>代码思路是，用.copy()方法复制一个单独的额外的dataframe，然后再用pd.cancat函数将两个dataframe合并。<br>其中还涉及到了属性替换，使用.replace()方法，第一个参数是被替换值，第二个参数是替换值，第三个参数不清楚，需要查一查。</p>
+</li>
+<li><p>填充属性中的空值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将空值填充为&#x27;Non-U.S.&#x27;</span></span><br><span class="line">data[<span class="string">&#x27;company_u_s_state&#x27;</span>] = data[<span class="string">&#x27;company_u_s_state&#x27;</span>].fillna(<span class="string">&#x27;Non-U.S.&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>使用.fillan()方法</p>
+</li>
+<li><p>检查一个列是否在这个dataframe中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="string">&#x27;column_name&#x27;</span> <span class="keyword">in</span> data.columns:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The attribute is in the dataset.&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The attribute is not in the dataset.&quot;</span>)</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line"><span class="keyword">if</span> data.get(<span class="string">&#x27;column_name&#x27;</span>) <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The attribute is in the dataset.&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;The attribute is not in the dataset.&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>使用in运算符或者dataframe.get()方法，我倒是感觉in最直观最实用。</p>
+</li>
+<li><p>一个对dataframe的特殊操作如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_updated[<span class="string">&#x27;refined_company_country&#x27;</span>] = data_updated.apply( <span class="keyword">lambda</span> row: <span class="string">f&quot;United States - <span class="subst">&#123;row[<span class="string">&#x27;company_u_s_state&#x27;</span>]&#125;</span>&quot;</span> <span class="keyword">if</span> row[<span class="string">&#x27;company_country&#x27;</span>] == <span class="string">&#x27;United States&#x27;</span> <span class="keyword">else</span> row[<span class="string">&#x27;company_country&#x27;</span>], axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>其中包含几个要点：<br>第一是我可以通过直接data[‘一个不存在的列’] &#x3D; something，来直接创造一个新列；<br>第二是.apply()方法默认对dataframe的每一行每一列执行其中的操作，axis &#x3D; 1表示行，默认为axis &#x3D; 0表示列</p>
+</li>
+<li><p>画图时，将坐标的名字斜过来，防止名字重叠。 </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plt.xticks(rotation=<span class="number">45</span>) <span class="comment"># 可以调整角度为45度或其他值 </span></span><br><span class="line">plt.tight_layout() <span class="comment"># 自动调整布局，以避免标签被截断</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>好像没了</p>
+</li>
+</ol>
+<h6 id="统计学、数据挖掘相关的知识"><a href="#统计学、数据挖掘相关的知识" class="headerlink" title="统计学、数据挖掘相关的知识"></a>统计学、数据挖掘相关的知识</h6><ol>
+<li><p>卡方检验和方差检验评估两个变量的相关性。<br>核心指标：计算出的P值和统计量（F统计量和卡方统计量）<br>P值数学原理：<em>假设原假设为真的前提下，观测到的检验统计量等于或更极端的概率。p值越小，越能说明数据与原假设不符，即有显著的证据拒绝原假设</em>。在这里原假设是：两个变量不相关。于是来算算P值：<br><img src="/2024/10/26/10-25-2024-%E7%A0%94%E7%A9%B6%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AF%BE%E8%AE%BE%E6%97%B6%E5%AD%A6%E5%88%B0%E7%9A%84%E5%85%B3%E4%BA%8E%E5%9B%9E%E5%BD%92%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86/Pzhi.png"><br>由其数学原理我们就可以通过P值来衡量两者之间的相关性了。这里方差检验我更好理解，所以后续都使用方差检验衡量相关性（我知道可能不是最优方法，但是先让我能理解整个过程吧，我太菜了T_T）</p>
+</li>
+<li><p>模型运行效果的衡量标准：R²<br>第一次让ai跑决策树的时候，ai跑出来说决策树效果并不好，判断标准是R²小于零。继续追问，给出以下解释：</p>
+<blockquote>
+<p><em>R²（决定系数）是用来衡量回归模型解释目标变量方差的比例的指标，取值范围通常在0到1之间。一个接近1的R²值表示模型能够很好地解释数据的变化，而接近0的R²值则表示模型对数据的拟合效果很差。</em><br>如何计算R²：<br><img src="/2024/10/26/10-25-2024-%E7%A0%94%E7%A9%B6%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AF%BE%E8%AE%BE%E6%97%B6%E5%AD%A6%E5%88%B0%E7%9A%84%E5%85%B3%E4%BA%8E%E5%9B%9E%E5%BD%92%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9F%A5%E8%AF%86/how2calcR.png"></p>
+</blockquote>
+</li>
+</ol>
+<p>这下我了解了一个基本的模型好坏的判据了。</p>
+<ol start="3">
+<li><p>决策树表现差的原因：<br> 1）数据量小，容易过拟合或者捕捉到噪声；特征有限（即维度太少）<br> 2）基于划分的决策树对连续变量划分有限，可能出现粗糙划分，降低拟合精度<br> 3）可能由于一个特征与目标值过强的关联性导致决策树太依赖这个特征，忽略其它特征的重要性<br>所以决策树可能并不适合这份数据。也有可能是参数问题，这需要我实际部署一次决策树或随机森林然后实际调参试一试。</p>
+</li>
+<li><p>目前能使用的回归模型：<br> 1）决策树<br> 2）随机僧林<br> 3）梯度提升回归（不是很了解）<br> 4）线性回归<br>虽然但是，我好歹知道了几种完成回归任务的方法，比一无所知好太多。一整个下午的探索收获其实很多，有一种从0到1的发展了。</p>
+</li>
+</ol>
 
     </article>
     
@@ -385,20 +435,15 @@
     <div class="article-catelogue--wrapper">
       <div class="catelogue catelogue-1">
         <h3>目录</h3>
-        
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0%E7%BB%8F%E8%BF%87"><span class="toc-number">2.</span> <span class="toc-text">学习经过</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%83%A8%E5%88%86"><span class="toc-number">2.1.</span> <span class="toc-text">数据处理部分</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#pycharm%E7%A0%B4%E8%A7%A3"><span class="toc-number">2.1.1.</span> <span class="toc-text">pycharm破解</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%AD%A6%E5%88%B0%E7%9A%84python%E7%9F%A5%E8%AF%86"><span class="toc-number">2.1.2.</span> <span class="toc-text">学到的python知识</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E5%AD%A6%E3%80%81%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E7%9B%B8%E5%85%B3%E7%9A%84%E7%9F%A5%E8%AF%86"><span class="toc-number">2.1.3.</span> <span class="toc-text">统计学、数据挖掘相关的知识</span></a></li></ol></li></ol></li></ol>
       </div>
       
         <div class="catelogue catelogue-2">
-          
-            <p>
-              <span>上一篇：</span>
-              <a href="/2024/10/08/10-8-2024-早上上了传感器的课程/">10.8.2024 早上上了传感器的课程</a>
-            </p>
            
           
             <p>
               <span>下一篇</span>
-              <a href="/2024/09/29/hexo基本命令/">hexo基本命令</a>
+              <a href="/2024/10/22/hexo博客建设之开启新的页面/">hexo博客建设之开启新的页面</a>
             </p>
           
         </div>
