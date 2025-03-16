@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>夏远的个人主页——tags | Hexo</title>
+  <title>夏远的个人主页——FOC与SVPWM学习1 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/xiayuan_icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/public.css" />
@@ -16,7 +16,7 @@
 
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `夏远的个人主页——tags`
+    document.title = `夏远的个人主页——FOC与SVPWM学习1`
   </script>
 <meta name="generator" content="Hexo 7.3.0"></head>
 
@@ -347,14 +347,102 @@
       <div id="main-container" class="main-container">
 
 
-  <link rel="stylesheet" href="/css/partial/tags.css" />
+  <link rel="stylesheet" href="/css/partial/article.css" />
 
-<div class="tags">
-  <h2 class="tags-title">小站标签</h2>
-  <div class="tags-list">
-    <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" style="font-size: 20px;">个人总结</a> <a href="/tags/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE/" style="font-size: 16.67px;">博客建设</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 13.33px;">学习</a>
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">FOC与SVPWM学习1</h1>
+    <div class="article-info">
+      <div class="article-info--item">
+        <div class="article-info--info">
+          
+          <div class="article-info--categories">
+            <span>分类：</span>
+            
+          </div>
+          
+          
+          <div class="article-info--tags">
+            <span>标签：</span>
+            <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a>
+          </div>
+          
+          <p class="article-info--date">日期：2025-03-16 20:03:36</p>
+        </div>
+        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
+      </div>
+    </div>
+    <article class="article-content markdown-body">
+      <p>基于TI白皮书来学习：<a target="_blank" rel="noopener" href="https://www.ti.com/lit/an/bpra073">https://www.ti.com/lit/an/bpra073</a></p>
+<hr>
+<ol>
+<li><p>FOC的特点和优势：<br> It is based on three major points: the machine current and voltage space vectors, the transformation of a three phase speed and time dependent system into a two co-ordinate time invariant system and effective Pulse Width Modulation pattern generation. Thanks to these factors, the control of AC machine acquires every advantage of DC machine control and frees itself from the mechanical commutation drawbacks.<br> 该方法基于三个主要方面：机器电流和电压的空间矢量、将一个三相速度和时间相关的系统转换成一个两坐标时间不变系统以及有效的脉宽调制（PWM）模式生成。由于这些因素，交流机器控制获得了直流机器控制的所有优点，摆脱了机械换向的弊端。</p>
+<ul>
+<li>功率密度提高</li>
+<li>去除电刷，电机效率增加5~10%</li>
+<li>通过park变换，励磁电流和转矩电流解耦，能够实现直接控制转矩。</li>
+</ul>
+</li>
+<li><p>说到励磁电流i_d和转矩电流i_q，了解了一些拓展知识：<br> <img src="/2025/03/16/FOC%E4%B8%8ESVPWM%E5%AD%A6%E4%B9%A01/foc11.png"></p>
+<ul>
+<li>i_d的作用：<br>  1）调节励磁磁场；<br>  2）对于SPMSM，负向id可以实现弱磁控制提高转速；<br>  3）在MTPA（最大转矩&#x2F;电流）控制中，对IPMSM需协调i_d与i_q的比例，对SPMSM，i_d &#x3D; 0。</li>
+<li>i_q的作用：<br>  1）直接控制转矩<br>  <img src="/2025/03/16/FOC%E4%B8%8ESVPWM%E5%AD%A6%E4%B9%A01/foc12.png"><br>  2）电机的动态响应的主要体现</li>
+</ul>
+</li>
+<li><p>弱磁控制：<br> 1）<img src="/2025/03/16/FOC%E4%B8%8ESVPWM%E5%AD%A6%E4%B9%A01/foc13.png"><br> 所以i_q与i_d之间是此消彼长的关系（绝对值）</p>
+<p> 2)未弱磁时，i_d &#x3D; 0。反电动势是定子切割磁感线产生，当电机转速增大，磁场强度一定，反电动势会正比增大，直到反电动势接近直流母线电压，达到平衡，速度无法再增加。</p>
+<p> 3）励磁电流产生的磁场方向与永磁体磁场方向相同，i_d反向注入时，会削弱磁场，从而在速度一定时降低反电动势，也就是说需要更大的转速才会触及到电压极限。</p>
+<p> 4）由于i_d与i_q此消彼长，弱磁时i_q最大值减小，也就导致输出转矩减小。</p>
+<p> 5）理解为汽车换挡</p>
+</li>
+</ol>
+
+    </article>
+    
+  </div>
+  <div class="article-catelogue">
+    <div class="article-catelogue--wrapper">
+      <div class="catelogue catelogue-1">
+        <h3>目录</h3>
+        
+      </div>
+      
+        <div class="catelogue catelogue-2">
+           
+          
+            <p>
+              <span>下一篇</span>
+              <a href="/2024/10/26/10-25-2024-研究大数据课设时学到的关于回归问题的一些知识/">10.25.2024 研究大数据课设时学到的关于回归问题的一些知识</a>
+            </p>
+          
+        </div>
+      
+    </div>
   </div>
 </div>
+
+
+
+<script>
+  $(document).on('pjax:complete', function() {
+    const tocs = document.querySelector('.toc')
+    const links = tocs ? tocs.querySelectorAll('a') : []
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        const href = decodeURIComponent(e.href)
+        href.search(/#(.*)/)
+        const id = RegExp.$1
+        const target = document.querySelector('#' + id)
+        const top = target.offsetTop
+        document.documentElement.scrollTo({
+          top: top - 100,
+          behavior: 'smooth'
+        })
+        e.preventDefault()
+      })
+    })
+  })
+</script> 
 
 </div>
       <div class="main-right-wrapper"><div class="main-right">
