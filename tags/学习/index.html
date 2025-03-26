@@ -193,7 +193,7 @@
   const ipt = document.querySelector('#search-input')
   const btn = document.querySelector('#search-btn')
   const layer = document.querySelector('#search-layer')
-  const posts = JSON.parse(`[{"title":"10.14.2024 总结","path":"2024/10/15/10-14-2024-总结/"},{"title":"10.10.2024凌晨 熬夜看比赛之反思","path":"2024/10/10/10-10-2024凌晨-熬夜看比赛之反思/"},{"title":"10.15.2024 总结 10.16.2024要做的事","path":"2024/10/16/10-15-2024-总结-10-16-2024要做的事/"},{"title":"10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性","path":"2024/10/16/10-15-2024学到的东西-关于-人生堆栈-项目落地的急迫性/"},{"title":"10.16.2024学到的东西，第二天要做的事情","path":"2024/10/17/10-16-2024学到的东西，第二天要做的事情/"},{"title":"10.16.2024总结","path":"2024/10/17/10-16-2024总结/"},{"title":"10.178.2024学到的东西和今天要做的事情","path":"2024/10/18/10-17-2024学到的东西和今天要做的事情/"},{"title":"10.17.2024总结","path":"2024/10/18/10-17-2024总结/"},{"title":"10.18.2024学到的东西 & 今天要做的事","path":"2024/10/19/10-18-2024学到的东西-今天要做的事/"},{"title":"10.18.2024总结","path":"2024/10/19/10-18-2024总结/"},{"title":"10.19.2024学到的东西 & 今天要做的事情","path":"2024/10/20/10-19-2024学到的东西-今天要做的事情/"},{"title":"10.19.2024总结","path":"2024/10/20/10-19-2024总结/"},{"title":"10.20.2024学到的东西 & 今天要做的事情","path":"2024/10/21/10-20-2024学到的东西-今天要做的事情/"},{"title":"10.20.2024总结","path":"2024/10/21/10-20-2024总结/"},{"title":"10.21.2024学到的东西 & 今天要做的事情","path":"2024/10/22/10-21-2024学到的东西-今天要做的事情/"},{"title":"10.21.2024总结","path":"2024/10/22/10-21-2024总结/"},{"title":"10.25.2024 研究大数据课设时学到的关于回归问题的一些知识","cover":"/images/covers/pythonMeme1.png","path":"2024/10/26/10-25-2024-研究大数据课设时学到的关于回归问题的一些知识/"},{"title":"10.8.2024 总结","path":"2024/10/08/10-8-2024-总结/"},{"title":"10.8.2024 早上上了传感器的课程","path":"2024/10/08/10-8-2024-早上上了传感器的课程/"},{"title":"2025.3~2025.9 学习清单","cover":"/images/covers/2025.3 学习计划.jpg","path":"2025/03/18/2025-3-2025-9-学习清单/"},{"title":"FOC与SVPWM学习1","cover":"/images/covers/foc1.png","path":"2025/03/16/FOC与SVPWM学习1/"},{"title":"FOC与SVPWM学习2","cover":"/images/covers/foc2_cover.png","path":"2025/03/17/FOC与SVPWM学习2/"},{"title":"FOC与SVPWM学习3","cover":null,"path":"2025/03/18/FOC与SVPWM学习3/"},{"title":"Hello World","path":"2024/09/29/hello-world/"},{"title":"FOC与SVPWM学习4","path":"2025/03/19/FOC与SVPWM学习4/"},{"title":"hexo博客中插入图片测试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo博客中插入图片测试/"},{"title":"hexo之还是想把博客的tag搞起来 10.16.2024晚","cover":"/images/covers/neko_confusing.gif","path":"2024/10/16/hexo之还是想把博客的tag搞起来-10-16-2024晚/"},{"title":"hexo博客建设之为每个post单独设置封面的尝试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之为每个post单独设置封面的尝试/"},{"title":"hexo博客建设之修复空白页 & 第一次尝试添加一个index.html","cover":"/images/covers/neko_confusing.gif","path":"2024/10/19/hexo博客建设之修复空白页-第一次尝试添加一个index-html/"},{"title":"hexo博客建设之开启新的页面","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之开启新的页面/"},{"title":"hexo基本命令","cover":"/images/covers/neko_confusing.gif","path":"2024/09/29/hexo基本命令/"},{"title":"hexo插入图片测试之二","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo插入图片测试之二/"},{"title":"hexo更改主题，以及修改主题的实践","cover":"/images/covers/neko_confusing.gif","path":"2024/10/11/hexo更改主题，以及修改主题的实践/"},{"title":"国庆的挣扎","path":"2024/10/07/国庆的挣扎/"},{"title":"夏远的第一篇博客","path":"2024/09/29/夏远的第一篇博客/"},{"title":"对傅里叶变换和级数的全新理解","path":"2025/03/21/对傅里叶变换和级数的全新理解/"},{"title":"我急需审视自己的一些东西","path":"2024/10/14/我急需审视自己的一些东西/"},{"title":"整理桌面，顺便换一张壁纸","path":"2024/10/11/整理桌面，顺便换一张壁纸/"},{"title":"过去两天的总结，以及今天的计划","path":"2024/10/14/过去两天的总结，以及今天的计划/"},{"title":"迟到的10.10.2024总结","path":"2024/10/11/迟到的10-10-2024总结/"}]`)
+  const posts = JSON.parse(`[{"title":"10.10.2024凌晨 熬夜看比赛之反思","path":"2024/10/10/10-10-2024凌晨-熬夜看比赛之反思/"},{"title":"10.14.2024 总结","path":"2024/10/15/10-14-2024-总结/"},{"title":"10.15.2024 总结 10.16.2024要做的事","path":"2024/10/16/10-15-2024-总结-10-16-2024要做的事/"},{"title":"10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性","path":"2024/10/16/10-15-2024学到的东西-关于-人生堆栈-项目落地的急迫性/"},{"title":"10.16.2024学到的东西，第二天要做的事情","path":"2024/10/17/10-16-2024学到的东西，第二天要做的事情/"},{"title":"10.178.2024学到的东西和今天要做的事情","path":"2024/10/18/10-17-2024学到的东西和今天要做的事情/"},{"title":"10.17.2024总结","path":"2024/10/18/10-17-2024总结/"},{"title":"10.18.2024学到的东西 & 今天要做的事","path":"2024/10/19/10-18-2024学到的东西-今天要做的事/"},{"title":"10.16.2024总结","path":"2024/10/17/10-16-2024总结/"},{"title":"10.18.2024总结","path":"2024/10/19/10-18-2024总结/"},{"title":"10.19.2024学到的东西 & 今天要做的事情","path":"2024/10/20/10-19-2024学到的东西-今天要做的事情/"},{"title":"10.19.2024总结","path":"2024/10/20/10-19-2024总结/"},{"title":"10.20.2024学到的东西 & 今天要做的事情","path":"2024/10/21/10-20-2024学到的东西-今天要做的事情/"},{"title":"10.21.2024学到的东西 & 今天要做的事情","path":"2024/10/22/10-21-2024学到的东西-今天要做的事情/"},{"title":"10.20.2024总结","path":"2024/10/21/10-20-2024总结/"},{"title":"10.21.2024总结","path":"2024/10/22/10-21-2024总结/"},{"title":"10.25.2024 研究大数据课设时学到的关于回归问题的一些知识","cover":"/images/covers/pythonMeme1.png","path":"2024/10/26/10-25-2024-研究大数据课设时学到的关于回归问题的一些知识/"},{"title":"10.8.2024 总结","path":"2024/10/08/10-8-2024-总结/"},{"title":"10.8.2024 早上上了传感器的课程","path":"2024/10/08/10-8-2024-早上上了传感器的课程/"},{"title":"2025.3~2025.9 学习清单","cover":"/images/covers/2025.3 学习计划.jpg","path":"2025/03/18/2025-3-2025-9-学习清单/"},{"title":"Bode图1","path":"2025/03/26/Bode图1/"},{"title":"Bode图2  手绘bode图","path":"2025/03/26/Bode图2 手绘bode图/"},{"title":"FOC与SVPWM学习1","cover":"/images/covers/foc1.png","path":"2025/03/16/FOC与SVPWM学习1/"},{"title":"FOC与SVPWM学习2","cover":"/images/covers/foc2_cover.png","path":"2025/03/17/FOC与SVPWM学习2/"},{"title":"FOC与SVPWM学习3","cover":null,"path":"2025/03/18/FOC与SVPWM学习3/"},{"title":"FOC与SVPWM学习4","path":"2025/03/19/FOC与SVPWM学习4/"},{"title":"Hello World","path":"2024/09/29/hello-world/"},{"title":"hexo之还是想把博客的tag搞起来 10.16.2024晚","cover":"/images/covers/neko_confusing.gif","path":"2024/10/16/hexo之还是想把博客的tag搞起来-10-16-2024晚/"},{"title":"hexo博客中插入图片测试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo博客中插入图片测试/"},{"title":"hexo博客建设之为每个post单独设置封面的尝试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之为每个post单独设置封面的尝试/"},{"title":"hexo博客建设之修复空白页 & 第一次尝试添加一个index.html","cover":"/images/covers/neko_confusing.gif","path":"2024/10/19/hexo博客建设之修复空白页-第一次尝试添加一个index-html/"},{"title":"hexo博客建设之开启新的页面","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之开启新的页面/"},{"title":"hexo基本命令","cover":"/images/covers/neko_confusing.gif","path":"2024/09/29/hexo基本命令/"},{"title":"hexo插入图片测试之二","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo插入图片测试之二/"},{"title":"hexo更改主题，以及修改主题的实践","cover":"/images/covers/neko_confusing.gif","path":"2024/10/11/hexo更改主题，以及修改主题的实践/"},{"title":"国庆的挣扎","path":"2024/10/07/国庆的挣扎/"},{"title":"夏远的第一篇博客","path":"2024/09/29/夏远的第一篇博客/"},{"title":"对傅里叶变换和级数的全新理解","path":"2025/03/21/对傅里叶变换和级数的全新理解/"},{"title":"我急需审视自己的一些东西","path":"2024/10/14/我急需审视自己的一些东西/"},{"title":"整理桌面，顺便换一张壁纸","path":"2024/10/11/整理桌面，顺便换一张壁纸/"},{"title":"过去两天的总结，以及今天的计划","path":"2024/10/14/过去两天的总结，以及今天的计划/"},{"title":"迟到的10.10.2024总结","path":"2024/10/11/迟到的10-10-2024总结/"}]`)
   ipt.addEventListener('keyup', e => {
     if (e.key === 'Enter') {
       handleSearch()
@@ -327,7 +327,7 @@
       </h5>
       <p class="main-left--subtitle">
         <span>文章数目：</span>
-        <span>40 篇</span>
+        <span>42 篇</span>
       </p>
       <p class="main-left--subtitle">
         <span>最近动态：</span>
@@ -335,7 +335,7 @@
       </p>
       <p class="main-left--subtitle">
         <span>上线时间：</span>
-        <span>174天</span>
+        <span>179天</span>
       </p>
       <p class="main-left--subtitle">
         <span>当前版本：</span>
@@ -350,6 +350,25 @@
 
 <div class="index">
   <div class="index-left">
+    
+      <div class="index-article">
+        <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
+        <div class="index-article--box">
+          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="Bode图2  手绘bode图" />
+        </div>
+        <div class="index-article--content">
+          <a href="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/">Bode图2  手绘bode图 </a>
+          <div>
+            
+            
+              <p>
+                <a class="-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a>
+              </p>
+            
+          </div>
+          <div class="bg"></div>
+        </div>
+      </div>
     
       <div class="index-article">
         <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
@@ -427,13 +446,16 @@
         </div>
       </div>
     
+  </div>
+  <div class="index-center">
+    
       <div class="index-article">
-        <!-- <img class="index-article--cover" src="/imgs/default-cover.webp" alt=""> -->
+        <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
         <div class="index-article--box">
-          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="10.8.2024 早上上了传感器的课程" />
+          <img class="index-article--cover" data-cover="imgs/default-cover.webp" alt="Bode图1" />
         </div>
         <div class="index-article--content">
-          <a href="/2024/10/08/10-8-2024-%E6%97%A9%E4%B8%8A%E4%B8%8A%E4%BA%86%E4%BC%A0%E6%84%9F%E5%99%A8%E7%9A%84%E8%AF%BE%E7%A8%8B/">10.8.2024 早上上了传感器的课程 </a>
+          <a href="/2025/03/26/Bode%E5%9B%BE1/">Bode图1 </a>
           <div>
             
             
@@ -445,9 +467,6 @@
           <div class="bg"></div>
         </div>
       </div>
-    
-  </div>
-  <div class="index-center">
     
       <div class="index-article">
         <!-- <img class="index-article--cover" data-cover="" src="/imgs/default-cover.webp" alt=""> -->
@@ -530,13 +549,13 @@
     <div class="index-right-wrapper">
       
       <ul class="tags" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E8%AE%BE/" rel="tag">博客建设</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/03/">2025年03月</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">2024年10月</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/09/">2024年09月</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/03/">2025年03月</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">2024年10月</a><span class="archive-list-count">31</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/09/">2024年09月</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 </div>
 
   <div class="page">
-    <span class="page-number current">1</span>
+    <span class="page-number current">1</span><a class="page-number" href="/tags/%E5%AD%A6%E4%B9%A0/page/2/">2</a><a class="extend next" rel="next" href="/tags/%E5%AD%A6%E4%B9%A0/page/2/">&gt;</a>
   </div>
 
 
