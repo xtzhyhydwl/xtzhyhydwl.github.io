@@ -193,7 +193,7 @@
   const ipt = document.querySelector('#search-input')
   const btn = document.querySelector('#search-btn')
   const layer = document.querySelector('#search-layer')
-  const posts = JSON.parse(`[{"title":"10.10.2024凌晨 熬夜看比赛之反思","path":"2024/10/10/10-10-2024凌晨-熬夜看比赛之反思/"},{"title":"10.14.2024 总结","path":"2024/10/15/10-14-2024-总结/"},{"title":"10.15.2024 总结 10.16.2024要做的事","path":"2024/10/16/10-15-2024-总结-10-16-2024要做的事/"},{"title":"10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性","path":"2024/10/16/10-15-2024学到的东西-关于-人生堆栈-项目落地的急迫性/"},{"title":"10.16.2024学到的东西，第二天要做的事情","path":"2024/10/17/10-16-2024学到的东西，第二天要做的事情/"},{"title":"10.16.2024总结","path":"2024/10/17/10-16-2024总结/"},{"title":"10.17.2024总结","path":"2024/10/18/10-17-2024总结/"},{"title":"10.18.2024学到的东西 & 今天要做的事","path":"2024/10/19/10-18-2024学到的东西-今天要做的事/"},{"title":"10.178.2024学到的东西和今天要做的事情","path":"2024/10/18/10-17-2024学到的东西和今天要做的事情/"},{"title":"10.18.2024总结","path":"2024/10/19/10-18-2024总结/"},{"title":"10.19.2024学到的东西 & 今天要做的事情","path":"2024/10/20/10-19-2024学到的东西-今天要做的事情/"},{"title":"10.20.2024学到的东西 & 今天要做的事情","path":"2024/10/21/10-20-2024学到的东西-今天要做的事情/"},{"title":"10.19.2024总结","path":"2024/10/20/10-19-2024总结/"},{"title":"10.20.2024总结","path":"2024/10/21/10-20-2024总结/"},{"title":"10.21.2024学到的东西 & 今天要做的事情","path":"2024/10/22/10-21-2024学到的东西-今天要做的事情/"},{"title":"10.21.2024总结","path":"2024/10/22/10-21-2024总结/"},{"title":"10.25.2024 研究大数据课设时学到的关于回归问题的一些知识","cover":"/images/covers/pythonMeme1.png","path":"2024/10/26/10-25-2024-研究大数据课设时学到的关于回归问题的一些知识/"},{"title":"10.8.2024 总结","path":"2024/10/08/10-8-2024-总结/"},{"title":"10.8.2024 早上上了传感器的课程","path":"2024/10/08/10-8-2024-早上上了传感器的课程/"},{"title":"2025.3~2025.9 学习清单","cover":"/images/covers/2025.3 学习计划.jpg","path":"2025/03/18/2025-3-2025-9-学习清单/"},{"title":"Bode图1","path":"2025/03/26/Bode图1/"},{"title":"Bode图2  手绘bode图","path":"2025/03/26/Bode图2 手绘bode图/"},{"title":"FOC与SVPWM学习2","cover":"/images/covers/foc2_cover.png","path":"2025/03/17/FOC与SVPWM学习2/"},{"title":"FOC与SVPWM学习3","cover":null,"path":"2025/03/18/FOC与SVPWM学习3/"},{"title":"FOC与SVPWM学习4","path":"2025/03/19/FOC与SVPWM学习4/"},{"title":"Hello World","path":"2024/09/29/hello-world/"},{"title":"FOC与SVPWM学习1","cover":"/images/covers/foc1.png","path":"2025/03/16/FOC与SVPWM学习1/"},{"title":"hexo之还是想把博客的tag搞起来 10.16.2024晚","cover":"/images/covers/neko_confusing.gif","path":"2024/10/16/hexo之还是想把博客的tag搞起来-10-16-2024晚/"},{"title":"hexo博客中插入图片测试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo博客中插入图片测试/"},{"title":"hexo博客建设之为每个post单独设置封面的尝试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之为每个post单独设置封面的尝试/"},{"title":"hexo博客建设之修复空白页 & 第一次尝试添加一个index.html","cover":"/images/covers/neko_confusing.gif","path":"2024/10/19/hexo博客建设之修复空白页-第一次尝试添加一个index-html/"},{"title":"hexo基本命令","cover":"/images/covers/neko_confusing.gif","path":"2024/09/29/hexo基本命令/"},{"title":"hexo博客建设之开启新的页面","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之开启新的页面/"},{"title":"hexo更改主题，以及修改主题的实践","cover":"/images/covers/neko_confusing.gif","path":"2024/10/11/hexo更改主题，以及修改主题的实践/"},{"title":"hexo插入图片测试之二","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo插入图片测试之二/"},{"title":"国庆的挣扎","path":"2024/10/07/国庆的挣扎/"},{"title":"夏远的第一篇博客","path":"2024/09/29/夏远的第一篇博客/"},{"title":"对傅里叶变换和级数的全新理解","path":"2025/03/21/对傅里叶变换和级数的全新理解/"},{"title":"我急需审视自己的一些东西","path":"2024/10/14/我急需审视自己的一些东西/"},{"title":"整理桌面，顺便换一张壁纸","path":"2024/10/11/整理桌面，顺便换一张壁纸/"},{"title":"过去两天的总结，以及今天的计划","path":"2024/10/14/过去两天的总结，以及今天的计划/"},{"title":"迟到的10.10.2024总结","path":"2024/10/11/迟到的10-10-2024总结/"}]`)
+  const posts = JSON.parse(`[{"title":"10.10.2024凌晨 熬夜看比赛之反思","path":"2024/10/10/10-10-2024凌晨-熬夜看比赛之反思/"},{"title":"10.14.2024 总结","path":"2024/10/15/10-14-2024-总结/"},{"title":"10.15.2024 总结 10.16.2024要做的事","path":"2024/10/16/10-15-2024-总结-10-16-2024要做的事/"},{"title":"10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性","path":"2024/10/16/10-15-2024学到的东西-关于-人生堆栈-项目落地的急迫性/"},{"title":"10.16.2024学到的东西，第二天要做的事情","path":"2024/10/17/10-16-2024学到的东西，第二天要做的事情/"},{"title":"10.16.2024总结","path":"2024/10/17/10-16-2024总结/"},{"title":"10.178.2024学到的东西和今天要做的事情","path":"2024/10/18/10-17-2024学到的东西和今天要做的事情/"},{"title":"10.17.2024总结","path":"2024/10/18/10-17-2024总结/"},{"title":"10.18.2024学到的东西 & 今天要做的事","path":"2024/10/19/10-18-2024学到的东西-今天要做的事/"},{"title":"10.18.2024总结","path":"2024/10/19/10-18-2024总结/"},{"title":"10.19.2024学到的东西 & 今天要做的事情","path":"2024/10/20/10-19-2024学到的东西-今天要做的事情/"},{"title":"10.19.2024总结","path":"2024/10/20/10-19-2024总结/"},{"title":"10.20.2024总结","path":"2024/10/21/10-20-2024总结/"},{"title":"10.20.2024学到的东西 & 今天要做的事情","path":"2024/10/21/10-20-2024学到的东西-今天要做的事情/"},{"title":"10.21.2024学到的东西 & 今天要做的事情","path":"2024/10/22/10-21-2024学到的东西-今天要做的事情/"},{"title":"10.21.2024总结","path":"2024/10/22/10-21-2024总结/"},{"title":"10.25.2024 研究大数据课设时学到的关于回归问题的一些知识","cover":"/images/covers/pythonMeme1.png","path":"2024/10/26/10-25-2024-研究大数据课设时学到的关于回归问题的一些知识/"},{"title":"10.8.2024 总结","path":"2024/10/08/10-8-2024-总结/"},{"title":"2025.3~2025.9 学习清单","cover":"/images/covers/2025.3 学习计划.jpg","path":"2025/03/18/2025-3-2025-9-学习清单/"},{"title":"10.8.2024 早上上了传感器的课程","path":"2024/10/08/10-8-2024-早上上了传感器的课程/"},{"title":"Bode图1","path":"2025/03/26/Bode图1/"},{"title":"Bode图2  手绘bode图","path":"2025/03/26/Bode图2 手绘bode图/"},{"title":"FOC与SVPWM学习1","cover":"/images/covers/foc1.png","path":"2025/03/16/FOC与SVPWM学习1/"},{"title":"FOC与SVPWM学习2","cover":"/images/covers/foc2_cover.png","path":"2025/03/17/FOC与SVPWM学习2/"},{"title":"FOC与SVPWM学习3","cover":null,"path":"2025/03/18/FOC与SVPWM学习3/"},{"title":"FOC与SVPWM学习4","path":"2025/03/19/FOC与SVPWM学习4/"},{"title":"Hello World","path":"2024/09/29/hello-world/"},{"title":"hexo之还是想把博客的tag搞起来 10.16.2024晚","cover":"/images/covers/neko_confusing.gif","path":"2024/10/16/hexo之还是想把博客的tag搞起来-10-16-2024晚/"},{"title":"hexo博客建设之为每个post单独设置封面的尝试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之为每个post单独设置封面的尝试/"},{"title":"hexo博客中插入图片测试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo博客中插入图片测试/"},{"title":"hexo博客建设之修复空白页 & 第一次尝试添加一个index.html","cover":"/images/covers/neko_confusing.gif","path":"2024/10/19/hexo博客建设之修复空白页-第一次尝试添加一个index-html/"},{"title":"hexo博客建设之开启新的页面","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之开启新的页面/"},{"title":"hexo基本命令","cover":"/images/covers/neko_confusing.gif","path":"2024/09/29/hexo基本命令/"},{"title":"hexo插入图片测试之二","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo插入图片测试之二/"},{"title":"国庆的挣扎","path":"2024/10/07/国庆的挣扎/"},{"title":"夏远的第一篇博客","path":"2024/09/29/夏远的第一篇博客/"},{"title":"hexo更改主题，以及修改主题的实践","cover":"/images/covers/neko_confusing.gif","path":"2024/10/11/hexo更改主题，以及修改主题的实践/"},{"title":"对傅里叶变换和级数的全新理解","path":"2025/03/21/对傅里叶变换和级数的全新理解/"},{"title":"我急需审视自己的一些东西","path":"2024/10/14/我急需审视自己的一些东西/"},{"title":"整理桌面，顺便换一张壁纸","path":"2024/10/11/整理桌面，顺便换一张壁纸/"},{"title":"终值定理和稳态误差","path":"2025/03/29/终值定理和稳态误差/"},{"title":"过去两天的总结，以及今天的计划","path":"2024/10/14/过去两天的总结，以及今天的计划/"},{"title":"迟到的10.10.2024总结","path":"2024/10/11/迟到的10-10-2024总结/"}]`)
   ipt.addEventListener('keyup', e => {
     if (e.key === 'Enter') {
       handleSearch()
@@ -264,7 +264,7 @@
         </a>
         <a href="/tags">
           <div>
-            <span>4</span>
+            <span>6</span>
             <span>标签</span>
           </div>
         </a>
@@ -327,7 +327,7 @@
       </h5>
       <p class="main-left--subtitle">
         <span>文章数目：</span>
-        <span>42 篇</span>
+        <span>43 篇</span>
       </p>
       <p class="main-left--subtitle">
         <span>最近动态：</span>
@@ -364,7 +364,7 @@
           
           <div class="article-info--tags">
             <span>标签：</span>
-            <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a>
+            <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a><a class="tag-link" href="/tags/%E8%87%AA%E5%8A%A8%E6%8E%A7%E5%88%B6%E5%8E%9F%E7%90%86/" rel="tag">自动控制原理</a>
           </div>
           
           <p class="article-info--date">日期：2025-03-26 21:25:15</p>
@@ -380,7 +380,7 @@
 <li>现在我们解锁了搭建复杂传递函数的第一个构件</li>
 </ol>
 </li>
-<li><p>对于零点和极点在零点处的系统, 即H(s) &#x3D; s 和 H(s) &#x3D; 1&#x2F;s</p>
+<li><p>对于零点和极点在原点处的系统, 即H(s) &#x3D; s 和 H(s) &#x3D; 1&#x2F;s</p>
 <ol>
 <li><strong>零点, 即使H(s) &#x3D; 0的s值</strong>, 当s &#x3D; 0时H(s) &#x3D; 0, 则称系统零点在原点处, 此时H(s) &#x3D; s</li>
 <li><strong>极点, 即使H(s) &#x3D; ∞的s值</strong>, 当s &#x3D; 0时H(s) &#x3D; ∞, 则称系统极点在原点处, 此时H(s) &#x3D; 1&#x2F;s</li>
@@ -396,7 +396,7 @@
 <li>一个有实极点的传递函数应该写成这样的形式:<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode222.png"><br> 其中<strong>ω_0被称为”转折频率”</strong><br> 不同的表达如下:<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode221.png"></li>
 <li>对于稳态响应, 设置s &#x3D; jω, 由于我们需要得到函数的实部和虚部, 所以需要将其分开, 这里采用的是<strong>分母乘以共轭复数</strong>的形式:<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode220.png"><br> 最终结果如下:<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode219.png"></li>
 <li>绘制bode图时, 先进行<strong>分段分析</strong>, 再来拟合.<br> a. 对于gain, 分析ω &lt;&lt; ω_0, ω &#x3D;&#x3D; ω_0, ω &gt;&gt; ω_0的情况<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode218.png"><br> b. 对于phase,  分析ω &lt;&lt; ω_0, ω &#x3D;&#x3D; ω_0, ω &gt;&gt; ω_0的情况的基础上, 考虑ω稍大(ω &#x3D;&#x3D; 10ω_0)和稍小(ω &#x3D;&#x3D; 0.1ω_0)的情况, 得到中间段的变化规律如上图.<br> c. 从图中可以看出, 对于一个实极点系统, 可以<em>通过两条直线估计其gain, 通过三条直线估计其phase,</em> 转折频率<strong>ω_0</strong>这个参数至关重要.</li>
-<li>对于零点在实轴上的系统, 和分析零极点在原点时的思路一致, 我们也可以<em>用有实极点系统的传递函数来表达有实零点系统的传递函数</em>, 即:<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode217.png"><br> 则bode图如下:<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode216.png"></li>
+<li>对于零点在实轴上的系统, 和分析零极点在原点时的思路一致, 我们也可以<em>用有实极点系统的传递函数来表达有实零点系统的传递函数</em>, 即:<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode217.png"><br> 则bode图如下棕色线部分:<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode216.png"></li>
 <li>总结手绘实零极点系统bode图的方法: 对于”<strong>标准形式</strong>“的实零极点系统,<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode215.png"><br> a. 考虑gain: 找到转折频率, 两条直线描绘, 其中<em>斜线斜率为20dB&#x2F;dec (横轴增大十倍, 变化20dB)</em>, 极点和零点图像对称<br> b. 考虑phase: 找到0.1ω_0, ω_0, 10ω_0的位置, 三条直线描绘, 极点和零点图像对称<br> c. 若系统不是”标准形式”, 采用线性运算使其<strong>变为”标准形式”,</strong> 例如:<br> <img src="/2025/03/26/Bode%E5%9B%BE2%20%E6%89%8B%E7%BB%98bode%E5%9B%BE/bode214.png"></li>
 <li>现在我们解锁了搭建复杂传递函数的第三个构件</li>
 </ol>
@@ -427,6 +427,11 @@
       </div>
       
         <div class="catelogue catelogue-2">
+          
+            <p>
+              <span>上一篇：</span>
+              <a href="/2025/03/29/终值定理和稳态误差/">终值定理和稳态误差</a>
+            </p>
            
           
             <p>
