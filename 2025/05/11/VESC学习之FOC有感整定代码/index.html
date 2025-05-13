@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>夏远的个人主页——10.15.2024学到的东西 &amp; 关于 人生堆栈 项目落地的急迫性 | Hexo</title>
+  <title>夏远的个人主页——VESC学习之FOC有感整定代码 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="/imgs/xiayuan_icon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/public.css" />
@@ -16,7 +16,7 @@
 
   <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
   <script>
-    document.title = `夏远的个人主页——10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性`
+    document.title = `夏远的个人主页——VESC学习之FOC有感整定代码`
   </script>
 <meta name="generator" content="Hexo 7.3.0"></head>
 
@@ -351,7 +351,7 @@
 
 <div class="article-container">
   <div class="article">
-    <h1 class="article-title">10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性</h1>
+    <h1 class="article-title">VESC学习之FOC有感整定代码</h1>
     <div class="article-info">
       <div class="article-info--item">
         <div class="article-info--info">
@@ -364,19 +364,59 @@
           
           <div class="article-info--tags">
             <span>标签：</span>
-            <a class="tag-link" href="/tags/%E4%B8%AA%E4%BA%BA%E6%80%BB%E7%BB%93/" rel="tag">个人总结</a>
+            <a class="tag-link" href="/tags/FOC/" rel="tag">FOC</a><a class="tag-link" href="/tags/VESC/" rel="tag">VESC</a><a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a>
           </div>
           
-          <p class="article-info--date">日期：2024-10-16 11:04:53</p>
+          <p class="article-info--date">日期：2025-05-11 22:37:13</p>
         </div>
-        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
+        <img src="/images/covers/VESC_ENC_DETECT10.png" alt="" class="article-cover">
       </div>
     </div>
     <article class="article-content markdown-body">
-      <h5 id="学到的东西"><a href="#学到的东西" class="headerlink" title="学到的东西"></a>学到的东西</h5><p>10.15.2024 学到的东西不多，简单总结：<br>一点Microsoft Word 使用技巧，包括给图片加注解，插入数学公式；<br>上的传感器课程里学到了光纤作为传感器的基本工作原理，特点和用途；<br>做作业的时候第一次认认真真看传感器的课本，学到了传感器的静态特性都有哪些，辨析了传感器的标定和校准的区别。当然今天我继续做作业，还能看看热电偶部分的课本内容，肯定也能学到新知识。</p>
-<h5 id="人生堆栈计划"><a href="#人生堆栈计划" class="headerlink" title="人生堆栈计划"></a>人生堆栈计划</h5><p>我很早就酝酿的一个计划，其表现形式就是依靠各种设备和软件的辅助，达到随时都能方便的查看、编辑、分类排序待办时间。我需要这个的目的是我时常忘记或者选择性忽略一些重要的事，从而拖延执行甚至酿成大祸。我受够了这种现状，所以我需要有个东西来提醒我，它是硬件和软件的结合体，不能是纯软件，纯软件的方法我早就试过了，操作繁琐而且经常不够显眼，坚持不了多久就没作用了。这种软件是有人把它用好的，对我没用肯定有我自己的问题，但是我想自己做一个符合我自己使用习惯的小玩意，也能解决问题。</p>
-<p>嘴上说但是一直不执行，我也受够了。由于我又开始忘记事情，所以现在急需一个提醒系统，先找一个纯软件代餐，然后开发自己的待办提醒系统。必须现在立刻马上每天抽一点时间来开发。我看晚上十点以后没事情，就在那个时段搞吧。</p>
-<p>光说不做最后就是🤡下场，而且是自己给自己扮🤡，这才是绝顶幽默。</p>
+      <ul>
+<li>探究这部分代码的原因, 一方面是我迟早要学到这一部分, 另一方面是目前25届机器人队使用VESC过程中出现了从没遇到的bug, 我想替他们研究一下原因.</li>
+</ul>
+<h3 id="代码位置"><a href="#代码位置" class="headerlink" title="代码位置"></a>代码位置</h3><ul>
+<li>首先想到先去VESC tool里查看有感整定的官方名称, 这一步叫做 <code>encoder detect</code>:<br>  <img src="/VESC_ENC_DETECT20.png"></li>
+<li>然后在各个重要文件中搜索<code>detect</code>, 直接在<code>mcpwm_foc.c</code>中找到相关函数:<br>  <img src="/VESC_ENC_DETECT19.png"></li>
+</ul>
+<h3 id="代码执行流程（配合整定时编码器位置图像来解释）"><a href="#代码执行流程（配合整定时编码器位置图像来解释）" class="headerlink" title="代码执行流程（配合整定时编码器位置图像来解释）"></a>代码执行流程（配合整定时编码器位置图像来解释）</h3><h4 id="第一步-初始准备"><a href="#第一步-初始准备" class="headerlink" title="第一步 初始准备"></a>第一步 初始准备</h4><ul>
+<li>首先禁止所有其它命令来控制电机, 读取电机参数指针, <em>允许手动修改相位</em>(电角度), 方便控制电机旋转, 临时将旧的电机参数(<code>offset</code>, <code>inverted</code>, <code>ratio</code>)保存, 所有新数据都直接存在现有的电机参数中.<br>  <img src="/VESC_ENC_DETECT17.png"></li>
+<li>对于ABI编码器, 首先旋转多圈来找到index(一般用不到).<br>  <img src="/VESC_ENC_DETECT15.png"></li>
+</ul>
+<h5 id="关于整定电流"><a href="#关于整定电流" class="headerlink" title="关于整定电流"></a>关于整定电流</h5><ul>
+<li>缓慢正向旋转到最近的<em>电角度为0</em>的位置, 对应整定图像一开始比较长的一段正向旋转, 以及一段1s的延时. <ul>
+<li>缓慢旋转采取每隔1ms, 按照固定步长手动步进相位(电角度)的方法, 猜测可能这一段是<em>纯开环过程</em>,  将目标电角度设置为与当前电角度相乘很小的值, 定子会瞬时产生一个固定方向的磁场, 然后转子由于对齐磁场的趋势, 就会自行旋转过去.</li>
+<li>旋转缓慢是为了<em>防止超调</em>, 而且合适的整定电流能保证产生足够强的磁场, 进而<em>产生足够的力矩让转子跟随磁场</em>. </li>
+<li>过小的<em>整定电流</em>可能导致转子不能及时跟随, 等到转子磁场与定子磁场相位偏差过大, 电磁力矩足以克服阻力让转子旋转时, 转子会一次性旋转较大的角度, 导致转动惯量比较大; 当转子磁场位置追上定子磁场位置时, 可能会超调. </li>
+<li>在接下来的整定过程中, 由于整定电流不足导致整个过程<em>反复抖动</em>, 可能进一步<em>导致整定结果不准确</em><br>  <img src="/VESC_ENC_DETECT12.png"><br>  <img src="/VESC_ENC_DETECT13.png"></li>
+</ul>
+</li>
+</ul>
+<h4 id="第二步-求ratio-以及inverted"><a href="#第二步-求ratio-以及inverted" class="headerlink" title="第二步 求ratio, 以及inverted"></a>第二步 求ratio, 以及inverted</h4><h5 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h5><ul>
+<li><code>ratio</code>: 电角度与编码器角度变化(电机机械角度)的比值</li>
+<li><code>inverted</code>: 电机与编码器相位增量方向是否一致, 一致则为false, 不一致则为true</li>
+</ul>
+<h5 id="执行步骤"><a href="#执行步骤" class="headerlink" title="执行步骤"></a>执行步骤</h5><ol>
+<li>先正转若干次, 每次电角度步进2&#x2F;3PI, 直到编码器显示大约转过一圈, 然结束正转<br> <img src="/VESC_ENC_DETECT11.png"><br> <img src="/VESC_ENC_DETECT10.png"></li>
+<li>与正转一样的逻辑, 但是执行反转<br> <img src="/VESC_ENC_DETECT9.png"></li>
+<li>计算<code>diff</code>, 计算<code>inverted</code>和<code>ratio</code><ul>
+<li>根据的是旋转时电机与编码器相位增量的<strong>绝对误差</strong>比值. </li>
+<li>记录误差时, 由于相位会产生<strong>跳变</strong>, 例如从PI到-PI. 所以将每一步旋转得到的相位误差, 映射到单位圆上, 得到一个单位向量, 若相位误差是<code>α</code>, 则向量可以用<code>(cosα, sinα)</code>来表示. sin和cos都是<strong>连续函数</strong>, 可以解决跳变的问题.</li>
+<li>变量s_sum和c_sum是将正弦值和余弦值累计的变量, 表示的是<strong>向量的合成</strong>. 可以想象因为每次相位误差基本相同, 产生的单位向量也基本相同, 叠加在一起就是大致相同的向量朝一个方向延伸. 这种延伸也能起到平均, <strong>减小误差</strong>的作用.<br>  <img src="/VESC_ENC_DETECT8.png"></li>
+<li>这种<strong>相位差转化为连续的向量并且合成</strong>的思想, 接下来还会用到.<br> <img src="/VESC_ENC_DETECT6.png"></li>
+</ul>
+</li>
+</ol>
+<h4 id="第三步-计算offset"><a href="#第三步-计算offset" class="headerlink" title="第三步 计算offset"></a>第三步 计算offset</h4><h5 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h5><ul>
+<li><code>offset</code>是编码器机械角度和电机电角度之间存在的一个固定偏差, 有这个<code>offset</code>, 才能知道<em>编码器角度和电机电角度的完整对应关系</em>, 才能将编码器角度用于FOC计算.</li>
+</ul>
+<h5 id="执行步骤-1"><a href="#执行步骤-1" class="headerlink" title="执行步骤"></a>执行步骤</h5><ol>
+<li>将电机电角度旋转归回到0<br> <img src="/VESC_ENC_DETECT5.png"></li>
+<li>正向旋转<code>ratio * 3</code>次, 每次2&#x2F;3PI, 总计旋转机械角度的一圈. 每次记录编码器角度与电角度差值(使用<code>as5047</code>时, 实际是机械角度与电角度差值). 将角度差值转化为向量进行叠加, 与之前的思路是一样的.<br> <img src="/VESC_ENC_DETECT4.png"><br> 期间相位步进比较平缓, 而且中间有100ms延时, 所以造成如下的阶梯型图像<br> <img src="/VESC_ENC_DETECT1.png"></li>
+<li>与正向旋转一样, 反向旋转一圈, 记录的<code>diff</code>是反向的<br> <img src="/VESC_ENC_DETECT3.png"></li>
+<li>利用s_sum和c_sum计算offset, 关于为何这样能计算出offset, 我有论证如下:<br> <img src="/VESC_ENC_DETECT2.png"><br> 理解起来很费劲, 但是总归是理解了.</li>
+</ol>
 
     </article>
     
@@ -385,20 +425,15 @@
     <div class="article-catelogue--wrapper">
       <div class="catelogue catelogue-1">
         <h3>目录</h3>
-        <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AD%A6%E5%88%B0%E7%9A%84%E4%B8%9C%E8%A5%BF"><span class="toc-number">1.</span> <span class="toc-text">学到的东西</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%BA%E7%94%9F%E5%A0%86%E6%A0%88%E8%AE%A1%E5%88%92"><span class="toc-number">2.</span> <span class="toc-text">人生堆栈计划</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E4%BD%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">代码位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%EF%BC%88%E9%85%8D%E5%90%88%E6%95%B4%E5%AE%9A%E6%97%B6%E7%BC%96%E7%A0%81%E5%99%A8%E4%BD%8D%E7%BD%AE%E5%9B%BE%E5%83%8F%E6%9D%A5%E8%A7%A3%E9%87%8A%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">代码执行流程（配合整定时编码器位置图像来解释）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5-%E5%88%9D%E5%A7%8B%E5%87%86%E5%A4%87"><span class="toc-number">2.1.</span> <span class="toc-text">第一步 初始准备</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%95%B4%E5%AE%9A%E7%94%B5%E6%B5%81"><span class="toc-number">2.1.1.</span> <span class="toc-text">关于整定电流</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5-%E6%B1%82ratio-%E4%BB%A5%E5%8F%8Ainverted"><span class="toc-number">2.2.</span> <span class="toc-text">第二步 求ratio, 以及inverted</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">2.2.1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.2.2.</span> <span class="toc-text">执行步骤</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5-%E8%AE%A1%E7%AE%97offset"><span class="toc-number">2.3.</span> <span class="toc-text">第三步 计算offset</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">执行步骤</span></a></li></ol></li></ol></li></ol>
       </div>
       
         <div class="catelogue catelogue-2">
-          
-            <p>
-              <span>上一篇：</span>
-              <a href="/2024/10/16/hexo之还是想把博客的tag搞起来-10-16-2024晚/">hexo之还是想把博客的tag搞起来 10.16.2024晚</a>
-            </p>
            
           
             <p>
               <span>下一篇</span>
-              <a href="/2024/10/16/10-15-2024-总结-10-16-2024要做的事/">10.15.2024 总结 10.16.2024要做的事</a>
+              <a href="/2025/05/07/FOC学习之SVPWM/">FOC学习之SVPWM</a>
             </p>
           
         </div>
