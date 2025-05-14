@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>夏远的个人主页——VESC代码分析1：固件文件总览 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="/imgs/xiayuan_icon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/public.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/iconfont.css" />
+  <link rel="stylesheet" href="/css/APlayer.min.css" />
+  <script src="/js/APlayer.min.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/jquery.pjax.min.js"></script>
+
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+  <script>
+    document.title = `夏远的个人主页——VESC代码分析1：固件文件总览`
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<style>
+  .load {
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(37, 35, 40);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 9999;
+  }
+  .load-circle {
+    width: 80px;
+    height: 80px;
+    border: 8px solid orange;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: rotate 1s linear infinite;
+    filter: drop-shadow(0 0 3px orange);
+  }
+  .load-circle-inner {
+    width: 40px;
+    height: 40px;
+    border: 8px solid orange;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: rotate-reverse .5s linear infinite;
+  }
+  .load-text {
+    margin-top: 20px;
+    font-size: 24px;
+    color: orange;
+    display: flex;
+  }
+  .load-text span {
+    margin: 0 5px;
+    text-shadow: 5px 5px 5px orange;
+    animation: move 1s linear infinite;
+  }
+  .load-text span:nth-child(1) {
+    animation-delay: -0.6s;
+  }
+  .load-text span:nth-child(2) {
+    animation-delay: -0.5s;
+  }
+  .load-text span:nth-child(3) {
+    animation-delay: -0.4s;
+  }
+  .load-text span:nth-child(4) {
+    animation-delay: -0.3s;
+  }
+  .load-text span:nth-child(5) {
+    animation-delay: -0.2s;
+  }
+  .load-text span:nth-child(6) {
+    animation-delay: -0.1s;
+  }
+  @keyframes rotate {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes rotate-reverse {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(-360deg); }
+  }
+  @keyframes move {
+    0% { transform: translateY(0%) rotate(0) scale(1); }
+    20% { transform: translateY(20%) rotate(10deg) scale(1.2); }
+    80% { transform: translateY(-10%) rotate(-20deg) scale(.8);}
+    100% { transform: translateY(0) rotate(0) scale(1); }
+  }
+
+  .progress {
+    position: fixed;
+    left: 0; top: 0;
+    width: 0;
+    height: 3px;
+    background-color: green;
+    transition: all cubic-bezier(0.215, 0.610, 0.355, 1) .1s;
+    z-index: 9999;
+  }
+
+  .to-up {
+    animation: toUp .5s 1;
+  }
+  .gray {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 9999;
+    display: none;
+    pointer-events: none;
+    background-color: #000;
+    mix-blend-mode: color;
+  }
+  @keyframes toUp {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0) ; opacity: 1; }
+  }
+</style>
+<body>
+  <div id="load" class="load">
+    <div class="load-circle">
+      <div class="load-circle-inner"></div>
+    </div>
+    <p class="load-text">
+      <span>L</span>
+      <span>O</span>
+      <span>A</span>
+      <span>D</span>
+      <span>I</span>
+      <span>N</span>
+      <span>G</span>
+    </p>
+  </div>
+  <div id="container" class="container w-100 vh-100" style="display: none;">
+    <header class="header">
+  <div class="header-wrapper">
+    <div class="header-left">
+      <div class="header-search">
+        <input id="search-input" type="text" class="header-search--input" placeholder="请输入要检索的文章标题" />
+        <span id="search-btn" class="header-search--icon"><i class="iconfont icon-sousuo"></i></span>
+      </div>
+      <div id="search-layer" class="header-search--layer hidden">
+        <p class="title">
+          <span>以下是搜索内容：</span>
+          <span id="close-layer-btn">关闭</span>
+        </p>
+        <ul>
+        </ul>
+      </div>
+    </div>
+    <div class="header-right">
+      <ul class="header-menu">
+        <li>
+          <a href="http://example.com/">
+            <i class="header-menu--icon iconfont icon-shouye"></i>
+            <span class="header-menu--span">首页</span>
+          </a>
+        </li>
+        <li>
+          <a href="http://example.com/log">
+            <i class="header-menu--icon iconfont icon-rizhi"></i>
+            <span class="header-menu--span">日志</span>
+          </a>
+        </li>
+        <li>
+          <a href="http://example.com/link">
+            <i class="header-menu--icon iconfont icon-youqinglianjie"></i>
+            <span class="header-menu--span">友情链接</span>
+          </a>
+        </li>
+        <li>
+          <a href="http://example.com/about">
+            <i class="header-menu--icon iconfont icon-guanyuwomen"></i>
+            <span class="header-menu--span">关于我</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<script>
+  const ipt = document.querySelector('#search-input')
+  const btn = document.querySelector('#search-btn')
+  const layer = document.querySelector('#search-layer')
+  const posts = JSON.parse(`[{"title":"10.14.2024 总结","path":"2024/10/15/10-14-2024-总结/"},{"title":"10.15.2024 总结 10.16.2024要做的事","path":"2024/10/16/10-15-2024-总结-10-16-2024要做的事/"},{"title":"10.10.2024凌晨 熬夜看比赛之反思","path":"2024/10/10/10-10-2024凌晨-熬夜看比赛之反思/"},{"title":"10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性","path":"2024/10/16/10-15-2024学到的东西-关于-人生堆栈-项目落地的急迫性/"},{"title":"10.16.2024学到的东西，第二天要做的事情","path":"2024/10/17/10-16-2024学到的东西，第二天要做的事情/"},{"title":"10.16.2024总结","path":"2024/10/17/10-16-2024总结/"},{"title":"10.18.2024学到的东西 & 今天要做的事","path":"2024/10/19/10-18-2024学到的东西-今天要做的事/"},{"title":"10.178.2024学到的东西和今天要做的事情","path":"2024/10/18/10-17-2024学到的东西和今天要做的事情/"},{"title":"10.17.2024总结","path":"2024/10/18/10-17-2024总结/"},{"title":"10.18.2024总结","path":"2024/10/19/10-18-2024总结/"},{"title":"10.19.2024学到的东西 & 今天要做的事情","path":"2024/10/20/10-19-2024学到的东西-今天要做的事情/"},{"title":"10.19.2024总结","path":"2024/10/20/10-19-2024总结/"},{"title":"10.20.2024总结","path":"2024/10/21/10-20-2024总结/"},{"title":"10.20.2024学到的东西 & 今天要做的事情","path":"2024/10/21/10-20-2024学到的东西-今天要做的事情/"},{"title":"10.21.2024学到的东西 & 今天要做的事情","path":"2024/10/22/10-21-2024学到的东西-今天要做的事情/"},{"title":"10.21.2024总结","path":"2024/10/22/10-21-2024总结/"},{"title":"10.8.2024 总结","path":"2024/10/08/10-8-2024-总结/"},{"title":"10.25.2024 研究大数据课设时学到的关于回归问题的一些知识","cover":"/images/covers/pythonMeme1.png","path":"2024/10/26/10-25-2024-研究大数据课设时学到的关于回归问题的一些知识/"},{"title":"10.8.2024 早上上了传感器的课程","path":"2024/10/08/10-8-2024-早上上了传感器的课程/"},{"title":"Bode图1","cover":"/images/covers/bode225.png","path":"2025/03/26/Bode图1/"},{"title":"2025.3~2025.9 学习清单","cover":"/images/covers/2025.3 学习计划.jpg","path":"2025/03/18/2025-3-2025-9-学习清单/"},{"title":"Bode图2  手绘bode图","cover":"/images/covers/bode225.png","path":"2025/03/26/Bode图2 手绘bode图/"},{"title":"FOC与SVPWM学习1","cover":"/images/covers/foc1.png","path":"2025/03/16/FOC与SVPWM学习1/"},{"title":"FOC与SVPWM学习2","cover":"/images/covers/foc2_cover.png","path":"2025/03/17/FOC与SVPWM学习2/"},{"title":"FOC与SVPWM学习3","cover":"/images/covers/just_a_motor.png","path":"2025/03/18/FOC与SVPWM学习3/"},{"title":"FOC与SVPWM学习4","cover":"/images/covers/foc43.png","path":"2025/03/19/FOC与SVPWM学习4/"},{"title":"FOC学习之SVPWM","cover":"/images/covers/SVPWM2.png","path":"2025/05/07/FOC学习之SVPWM/"},{"title":"Nyquist稳定准则","cover":"/images/covers/nygif3.gif","path":"2025/04/17/Nyquist稳定准则/"},{"title":"PID, 结合根轨迹调参","cover":"/images/covers/pid_cover.png","path":"2025/04/17/PID-结合根轨迹调参/"},{"title":"Routh-Hurwitz Criterion 劳斯判据","cover":"/images/covers/rh_criterion_cover.png","path":"2025/03/29/Routh-Hurwitz-Criterion-劳斯判据/"},{"title":"Hello World","path":"2024/09/29/hello-world/"},{"title":"VESC代码分析1：固件文件总览","path":"2025/05/14/VESC代码分析1：固件文件总览/"},{"title":"VESC学习之FOC有感整定代码","cover":"/images/covers/VESC_ENC_DETECT10.png","path":"2025/05/11/VESC学习之FOC有感整定代码/"},{"title":"hexo博客中插入图片测试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo博客中插入图片测试/"},{"title":"hexo之还是想把博客的tag搞起来 10.16.2024晚","cover":"/images/covers/neko_confusing.gif","path":"2024/10/16/hexo之还是想把博客的tag搞起来-10-16-2024晚/"},{"title":"hexo博客建设之为每个post单独设置封面的尝试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之为每个post单独设置封面的尝试/"},{"title":"hexo博客建设之修复空白页 & 第一次尝试添加一个index.html","cover":"/images/covers/neko_confusing.gif","path":"2024/10/19/hexo博客建设之修复空白页-第一次尝试添加一个index-html/"},{"title":"hexo博客建设之开启新的页面","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之开启新的页面/"},{"title":"hexo插入图片测试之二","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo插入图片测试之二/"},{"title":"hexo基本命令","cover":"/images/covers/neko_confusing.gif","path":"2024/09/29/hexo基本命令/"},{"title":"hexo更改主题，以及修改主题的实践","cover":"/images/covers/neko_confusing.gif","path":"2024/10/11/hexo更改主题，以及修改主题的实践/"},{"title":"关于电机线缆长度对控制效果的影响","cover":"/images/covers/just_a_motor.png","path":"2025/04/17/关于电机线缆长度对控制效果的影响/"},{"title":"国庆的挣扎","path":"2024/10/07/国庆的挣扎/"},{"title":"夏远的第一篇博客","path":"2024/09/29/夏远的第一篇博客/"},{"title":"对傅里叶变换和级数的全新理解","cover":"/images/covers/ft8.png","path":"2025/03/21/对傅里叶变换和级数的全新理解/"},{"title":"我急需审视自己的一些东西","path":"2024/10/14/我急需审视自己的一些东西/"},{"title":"根轨迹介绍与手绘根轨迹","cover":"/images/covers/rl213.png","path":"2025/04/07/根轨迹介绍与手绘根轨迹/"},{"title":"整理桌面，顺便换一张壁纸","path":"2024/10/11/整理桌面，顺便换一张壁纸/"},{"title":"系统稳定性 闭环系统的稳定性","cover":"/images/covers/syssta1.png","path":"2025/03/29/系统稳定性-闭环系统的稳定性/"},{"title":"根轨迹补充","cover":"/images/covers/rls18.png","path":"2025/04/17/根轨迹补充/"},{"title":"终值定理和稳态误差","cover":"/images/covers/fv5.png","path":"2025/03/29/终值定理和稳态误差/"},{"title":"过去两天的总结，以及今天的计划","path":"2024/10/14/过去两天的总结，以及今天的计划/"},{"title":"闭环系统的稳定裕度","cover":"/images/covers/sysmar_cover.png","path":"2025/04/17/闭环系统的稳定裕度/"},{"title":"迟到的10.10.2024总结","path":"2024/10/11/迟到的10-10-2024总结/"}]`)
+  ipt.addEventListener('keyup', e => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  })
+  btn.addEventListener('click', () => {
+    handleSearch()
+  })
+
+  document.querySelector('#close-layer-btn').addEventListener('click', () => {
+    layer.classList.toggle('hidden')
+  })
+
+  function handleSearch() {
+    if (ipt.value.trim() === '') {
+      return
+    }
+    let html = ''
+    const targetPosts = posts.filter(post => post.title.includes(ipt.value))
+    targetPosts.forEach(post => {
+      html += `
+        <li>
+          <div>
+            <a href="/${post.path}">${post.title.replace(new RegExp(ipt.value), `<span>${ipt.value}</span>`)}</a>
+          </div>
+          <img src="${post.cover || '/imgs/default-cover.webp' }" />
+        </li>
+      `
+    })
+    if (html.trim () === '') {
+      html += '<p class="empty">没有搜索到内容</p>'
+    }
+    layer.querySelector('ul').innerHTML = html
+    layer.classList.remove('hidden')
+  }
+</script> 
+    <section id="main" class="main">
+      <div class="main-left-wrapper">
+<div class="main-left">
+  <div class="main-left--block">
+    <div class="main-left--info">
+      <img src="/imgs/avatar.jpg"" class="main-left--avatar" />
+      <div class="main-left--intro">
+        <p class="main-left--name">xiayuan</p>
+        <div class="main-left--tags">
+          <span class="main-left--tag">阴暗</span>
+          <span class="main-left--tag">爬行</span>
+        </div>
+      </div>
+    </div>
+  
+    <div>
+      <div class="main-left--motto">
+        <p>“今日比昨日更善良”</p>
+        <p>“明日比今日更繁忙”</p>
+      </div>
+      <div class="main-left--github">
+        <span class="line"></span>
+        <a target="_blank" rel="noopener" href="https://github.com/xtzhyhydwl"><i class="logo iconfont icon-github-fill"></i></a>
+        <span class="line"></span>
+      </div>
+      <div class="main-left--statics">
+        <a href="/categories">
+          <div>
+            <span>0</span>
+            <span>分类</span>
+          </div>
+        </a>
+        <a href="/tags">
+          <div>
+            <span>7</span>
+            <span>标签</span>
+          </div>
+        </a>
+        <a href="/archives">
+          <div>
+            <span>5 </span>
+            <span>归档</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-left--block">
+    <ul class="main-left--menu">
+      
+        <li>
+          <a href="/">
+            <span class="header-menu--span">小站首页</span>
+            <i class="header-menu--icon iconfont icon-shouye"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/log">
+            <span class="header-menu--span">个人日志</span>
+            <i class="header-menu--icon iconfont icon-rizhi"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/link">
+            <span class="header-menu--span">友情链接</span>
+            <i class="header-menu--icon iconfont icon-youqinglianjie"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/about">
+            <span class="header-menu--span">关于自己</span>
+            <i class="header-menu--icon iconfont icon-guanyuwomen"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/tools">
+            <span class="header-menu--span">我的工具</span>
+            <i class="header-menu--icon iconfont icon-gongju"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="main-left--block">
+    <div class="main-left--site">
+      <h5 class="main-left--title">
+        <span>站点信息</span>
+        <i class="iconfont icon-zhandian"></i>
+      </h5>
+      <p class="main-left--subtitle">
+        <span>文章数目：</span>
+        <span>54 篇</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>最近动态：</span>
+        <span>今天</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>上线时间：</span>
+        <span>228天</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>当前版本：</span>
+        <span>v1.0.0</span>
+      </p>
+    </div>
+  </div>
+</div></div>
+      <div id="main-container" class="main-container">
+
+
+  <link rel="stylesheet" href="/css/partial/article.css" />
+
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">VESC代码分析1：固件文件总览</h1>
+    <div class="article-info">
+      <div class="article-info--item">
+        <div class="article-info--info">
+          
+          <div class="article-info--categories">
+            <span>分类：</span>
+            
+          </div>
+          
+          
+          <div class="article-info--tags">
+            <span>标签：</span>
+            <a class="tag-link" href="/tags/FOC/" rel="tag">FOC</a><a class="tag-link" href="/tags/VESC/" rel="tag">VESC</a><a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a>
+          </div>
+          
+          <p class="article-info--date">日期：2025-05-14 12:10:49</p>
+        </div>
+        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
+      </div>
+    </div>
+    <article class="article-content markdown-body">
+      <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><ul>
+<li>这是一个新的系列, 我将会一步步将VESC电调固件代码框架梳理出来, 结合我过去和现在的理解来重新学习VESC的固件, 同时记录学习的过程.</li>
+<li>目标是: <ol>
+<li>看懂电调从开机到关机&#x2F;出错的代码执行流程, 尽量找出电调实际工作现象的代码依据;</li>
+<li>看懂关键<strong>电机控制算法</strong>, FOC, BLDC, SVPWM, MTPA, HFI, SENSORLESS, 其中用到的观测器;</li>
+<li>学习chibiOS操作系统的一些特性和使用技巧, 借此深入学习单片机操作系统;</li>
+</ol>
+</li>
+<li>会采取理论结合实践的学习方法.</li>
+</ul>
+<h3 id="固件文件列表"><a href="#固件文件列表" class="headerlink" title="固件文件列表"></a>固件文件列表</h3><ul>
+<li>文件夹有这些<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC158.png"></li>
+<li>独立文件有这些<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC157.png"></li>
+<li>从上到下介绍</li>
+</ul>
+<h3 id="applications"><a href="#applications" class="headerlink" title="applications"></a>applications</h3><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC156.png"></p>
+<h4 id="重要的部分"><a href="#重要的部分" class="headerlink" title="重要的部分"></a>重要的部分</h4><ul>
+<li>红色框中是我认为<strong>重要的部分</strong></li>
+</ul>
+<ol>
+<li><code>app.c/.h</code>中定义了: 1) VESC的<strong>app设置</strong>的读写操作函数; 2) 一些<strong>预留接口</strong>的操作函数, 例如<code>外部ADC</code>, <code>UART</code>等; 3) 执行<strong>自定义功能</strong>相关的函数.<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Functions</span></span><br><span class="line"><span class="type">const</span> app_configuration* <span class="title function_">app_get_configuration</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_set_configuration</span><span class="params">(app_configuration *conf)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_disable_output</span><span class="params">(<span class="type">int</span> time_ms)</span>;</span><br><span class="line"><span class="type">bool</span> <span class="title function_">app_is_output_disabled</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">short</span> <span class="title function_">app_calc_crc</span><span class="params">(app_configuration* conf)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Standard apps</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">app_adc_start</span><span class="params">(<span class="type">bool</span> use_rx_tx)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_adc_stop</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_adc_configure</span><span class="params">(adc_config *conf)</span>;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">app_uartcomm_initialize</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_uartcomm_start</span><span class="params">(UART_PORT port_number)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_uartcomm_stop</span><span class="params">(UART_PORT port_number)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_uartcomm_configure</span><span class="params">(<span class="type">uint32_t</span> baudrate, <span class="type">bool</span> permanent_enabled, UART_PORT port_number)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_uartcomm_send_packet</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span> *data, <span class="type">unsigned</span> <span class="type">int</span> len,  UART_PORT port_number)</span>;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Custom apps</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">app_custom_start</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_custom_stop</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">app_custom_configure</span><span class="params">(app_configuration *conf)</span>;</span><br></pre></td></tr></table></figure></li>
+<li><code>appconf_default.h</code>中存放着<strong>默认app设置</strong>的宏定义, 恢复默认设置的时候, 各个参数从宏定义中获取. 所以有些app设置, 例如can的波特率, 是可以<em>提前在这里改掉</em>的<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> APPCONF_CAN_MODE</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> APPCONF_CAN_MODE					CAN_MODE_VESC</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> APPCONF_CAN_BAUD_RATE</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> APPCONF_CAN_BAUD_RATE				CAN_BAUD_500K</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> APPCONF_CAN_STATUS_RATE_1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> APPCONF_CAN_STATUS_RATE_1			50</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> APPCONF_CAN_STATUS_RATE_2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> APPCONF_CAN_STATUS_RATE_2			5</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> APPCONF_CAN_STATUS_MSGS_R1</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> APPCONF_CAN_STATUS_MSGS_R1			0</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> APPCONF_CAN_STATUS_MSGS_R2</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> APPCONF_CAN_STATUS_MSGS_R2			0</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">// The default app is UART in case the UART port is used for</span></span><br><span class="line"><span class="comment">// firmware updates.</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> APPCONF_APP_TO_USE</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> APPCONF_APP_TO_USE					APP_UART</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> APPCONF_UART_BAUDRATE</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> APPCONF_UART_BAUDRATE				115200</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="理解但是没深究的部分"><a href="#理解但是没深究的部分" class="headerlink" title="理解但是没深究的部分"></a>理解但是没深究的部分</h4><ul>
+<li>蓝色框内的文件我大概知道有什么用, 但是没有深究其原理.</li>
+</ul>
+<ol>
+<li><code>app_adc.c/app_uartcomm.c</code>的内容主要是为<strong>外部adc输入</strong>和<strong>额外的uart口</strong>分配引脚和实现基本功能, 外部函数声明统一放在<code>app.h</code>中, 如前文所示. 有一点需要注意的是, 外设驱动代码并不统一放在某个线程中运行, 而是<em>每个外设都有独立的线程和线程函数, 随用随开</em>.<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// adc</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">app_adc_start</span><span class="params">(<span class="type">bool</span> use_rx_tx)</span> &#123;   <span class="comment">//外部ADC的开启函数</span></span><br><span class="line"><span class="comment">// 配引脚</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HW_ADC_EXT_GPIO</span></span><br><span class="line">	palSetPadMode(HW_ADC_EXT_GPIO, HW_ADC_EXT_PIN, PAL_MODE_INPUT_ANALOG);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> HW_ADC_EXT2_GPIO</span></span><br><span class="line">	palSetPadMode(HW_ADC_EXT2_GPIO, HW_ADC_EXT2_PIN, PAL_MODE_INPUT_ANALOG);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">	<span class="keyword">if</span> (buttons_detached) &#123;</span><br><span class="line">		use_rx_tx_as_buttons = <span class="literal">false</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		use_rx_tx_as_buttons = use_rx_tx;</span><br><span class="line">	&#125;</span><br><span class="line">	stop_now = <span class="literal">false</span>;</span><br><span class="line">	chThdCreateStatic(adc_thread_wa, <span class="keyword">sizeof</span>(adc_thread_wa), NORMALPRIO, adc_thread, <span class="literal">NULL</span>);  <span class="comment">// 开线程</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// uart</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">app_uartcomm_start</span><span class="params">(UART_PORT port_number)</span> &#123;</span><br><span class="line">	<span class="keyword">if</span>(port_number &gt;= UART_NUMBER)&#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	packet_init(write_functions[port_number], process_functions[port_number], &amp;packet_state[port_number]);</span><br><span class="line">	<span class="keyword">if</span> (!thread_is_running) &#123;</span><br><span class="line">		chThdCreateStatic(packet_process_thread_wa, <span class="keyword">sizeof</span>(packet_process_thread_wa),</span><br><span class="line">				NORMALPRIO, packet_process_thread, <span class="literal">NULL</span>);  <span class="comment">// 开线程</span></span><br><span class="line">		thread_is_running = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	sdStart(serialPortDriverRx[port_number], &amp;uart_cfg[port_number]);</span><br><span class="line">	sdStart(serialPortDriverTx[port_number], &amp;uart_cfg[port_number]);</span><br><span class="line">	uart_is_running[port_number] = <span class="literal">true</span>;</span><br><span class="line">	palSetPadMode(  <span class="comment">// 配引脚</span></span><br><span class="line">		TxGpioPort[port_number], </span><br><span class="line">		TxGpioPin[port_number],</span><br><span class="line">		PAL_MODE_ALTERNATE(gpioAF[port_number]) | </span><br><span class="line">		PAL_STM32_OSPEED_HIGHEST | PAL_STM32_PUDR_PULLUP</span><br><span class="line">	);</span><br><span class="line">	palSetPadMode(</span><br><span class="line">		RxGpioPort[port_number], </span><br><span class="line">		RxGpioPin[port_number], </span><br><span class="line">		PAL_MODE_ALTERNATE(gpioAF[port_number]) |</span><br><span class="line">		PAL_STM32_OSPEED_HIGHEST | PAL_STM32_PUDR_PULLUP</span><br><span class="line">	);</span><br><span class="line">	pins_enabled[port_number] = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><code>app_custom_template.c</code>提供了一个<strong>模板</strong>, 包含一个空的线程和线程函数, 一个开启线程后<em>在每个pwm周期结束后执行</em>的空的函数, 还有演示如何<em>在上位机上画图</em>的代码(这部分没太注意看), 可以用来实现自定义功能.<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Threads</span></span><br><span class="line"><span class="type">static</span> <span class="title function_">THD_FUNCTION</span><span class="params">(my_thread, arg)</span>;</span><br><span class="line"><span class="type">static</span> <span class="title function_">THD_WORKING_AREA</span><span class="params">(my_thread_wa, <span class="number">1024</span>)</span>;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">app_custom_start</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">	mc_interface_set_pwm_callback(pwm_callback);  <span class="comment">// 传入函数指针, 设置这个函数为pwm周期结束后的回调函数</span></span><br><span class="line">	stop_now = <span class="literal">false</span>;</span><br><span class="line">	chThdCreateStatic(my_thread_wa, <span class="keyword">sizeof</span>(my_thread_wa),</span><br><span class="line">			NORMALPRIO, my_thread, <span class="literal">NULL</span>);  <span class="comment">// 开启线程</span></span><br><span class="line">	<span class="comment">// Terminal commands for the VESC Tool terminal can be registered.</span></span><br><span class="line">	terminal_register_command_callback(</span><br><span class="line">			<span class="string">&quot;custom_cmd&quot;</span>,</span><br><span class="line">			<span class="string">&quot;Print the number d&quot;</span>,</span><br><span class="line">			<span class="string">&quot;[d]&quot;</span>,</span><br><span class="line">			terminal_test);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="type">static</span> <span class="title function_">THD_FUNCTION</span><span class="params">(my_thread, arg)</span> &#123;</span><br><span class="line">	(<span class="type">void</span>)arg;</span><br><span class="line">	chRegSetThreadName(<span class="string">&quot;App Custom&quot;</span>);</span><br><span class="line">	is_running = <span class="literal">true</span>;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">	<span class="keyword">for</span>(;;) &#123;</span><br><span class="line">		<span class="comment">// Check if it is time to stop.</span></span><br><span class="line">		<span class="keyword">if</span> (stop_now) &#123;</span><br><span class="line">			is_running = <span class="literal">false</span>;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//...</span></span><br><span class="line">		chThdSleepMilliseconds(<span class="number">10</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">pwm_callback</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">	<span class="comment">// 自定义内容</span></span><br><span class="line">	<span class="comment">// Called for every control iteration in interrupt context.</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">// Called when the custom application is stopped. Stop our threads</span></span><br><span class="line"><span class="comment">// and release callbacks.</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">app_custom_stop</span><span class="params">(<span class="type">void</span>)</span> &#123;</span><br><span class="line">	mc_interface_set_pwm_callback(<span class="number">0</span>);  <span class="comment">// 清空函数指针</span></span><br><span class="line">	terminal_unregister_callback(terminal_test);</span><br><span class="line">	stop_now = <span class="literal">true</span>;  <span class="comment">// 即使线程在跑, 因为这个标志位, 实际上不会执行任何代码</span></span><br><span class="line">	<span class="keyword">while</span> (is_running) &#123;</span><br><span class="line">		chThdSleepMilliseconds(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><code>app_custom.c</code>用一系列宏定义指明了是否使用自定义app功能, 以及使用哪一个文件里的内容(但是我怀疑这个多选功能并没有实现)<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifdef</span> APP_CUSTOM_TO_USE</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> APP_CUSTOM_TO_USE</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> APP_CUSTOM_TO_USE_FILE_2</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> APP_CUSTOM_TO_USE_FILE_2</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> APP_CUSTOM_TO_USE_FILE_3</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> APP_CUSTOM_TO_USE_FILE_3</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> APP_CUSTOM_TO_USE_FILE_4</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> APP_CUSTOM_TO_USE_FILE_4</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> APP_CUSTOM_TO_USE_FILE_5</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> APP_CUSTOM_TO_USE_FILE_5</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="blackmagic"><a href="#blackmagic" class="headerlink" title="blackmagic"></a>blackmagic</h3><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC154.png"></p>
+<h4 id="这个是真不懂-说一下大概理解"><a href="#这个是真不懂-说一下大概理解" class="headerlink" title="这个是真不懂, 说一下大概理解"></a>这个是真不懂, 说一下大概理解</h4><ol>
+<li>关于<code>black magic</code><br> 全称是<code>black magic probe</code>, 这是一个开源的<strong>SWD调试器</strong>项目, 项目方有卖他们的板子配套固件使用, 也可以将固件中匹配的版本<em>移植到芯片上直接跑</em>, 使芯片具有通过SWD进行复杂调试和编程的功能.<br> 出于节省资源的目的, 本杰明应该只移植了<strong>部分功能</strong>. 他还写了一些更高层的库, <em>调用bm的底层函数, 能够通过VESC tool 调试和编程电调</em>.</li>
+<li><code>target</code>文件夹中的是bm固件的部分移植文件, 看不懂啦.</li>
+<li><code>bm_if.c/.h</code>中存放了本杰明自己写的高层函数, 包含bm的初始化, 与上位机的连接, flash擦除写入等功能.</li>
+<li><code>swdptap.c/.h</code>中存放的是<strong>比较底层的函数</strong>, 例如通过SWD发送和读取1个bit, 以及在此之上建立的发送和读取一个队列(seq).</li>
+<li>其它文件都是<code>bm_if.c/.h</code>调用的库函数, 内容并不多, 有些还被废弃了.</li>
+<li>想知道更多信息的可以去读一下<code>README.md</code></li>
+</ol>
+<h3 id="ChiBiOS-3-0-5"><a href="#ChiBiOS-3-0-5" class="headerlink" title="ChiBiOS_3.0.5"></a>ChiBiOS_3.0.5</h3><h4 id="顾名思义-这个是操作系统所在的文件夹"><a href="#顾名思义-这个是操作系统所在的文件夹" class="headerlink" title="顾名思义, 这个是操作系统所在的文件夹"></a>顾名思义, 这个是操作系统所在的文件夹</h4><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC153.png"></p>
+<ul>
+<li>简单看一下, 蓝色框中的文件是外部文件, 不是<code>ChiBiOS</code>的一部分, 也就是说这一部分是<em>可以替换的</em>, 例如以后VESC主控芯片换成了G4系列, 这一部分的标准外设库就要改一改</li>
+<li>绿色框中的是操作系统部分, 可以看到里面包含了一些比较熟悉的名字, hal(硬件抽象层), rt(实时), 其他的就不怎么认识了</li>
+<li>想了解具体文件架构可以看红框的<code>readme.txt</code>, 里面有写, 应该是官方文档.</li>
+</ul>
+<h4 id="关于ChiBiOS-以后有空会进行系统地学习"><a href="#关于ChiBiOS-以后有空会进行系统地学习" class="headerlink" title="关于ChiBiOS, 以后有空会进行系统地学习"></a>关于ChiBiOS, 以后有空会进行系统地学习</h4><blockquote>
+<p>由于篇幅的关系, 接下来的内容, 如果以后还会重复出现, 则只作尽量简单的解释.</p>
+</blockquote>
+<h3 id="comm"><a href="#comm" class="headerlink" title="comm"></a>comm</h3><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC152.png"></p>
+<ul>
+<li>这是VESC通过CAN和USB<em>与外界或上位机通信</em>的代码部分, 可以分为五个部分: <code>CAN</code>, <code>USB</code>, <code>commands</code>, <code>log</code>, <code>packet</code>.</li>
+</ul>
+<h4 id="CAN相关"><a href="#CAN相关" class="headerlink" title="CAN相关"></a>CAN相关</h4><h5 id="消息的分类"><a href="#消息的分类" class="headerlink" title="消息的分类"></a>消息的分类</h5><ul>
+<li>两个文件, <code>comm_can.c/.h</code>, 总的功能分为CAN消息的<code>读取</code>, <code>发送</code>, <code>编码</code>, <code>解码</code>四部分. </li>
+<li>其中读取和发送<em>底层直接通过<code>ChiBiOS</code>来实现</em>.</li>
+<li><strong>编码后的信息</strong>按用途可分为: <code>给主控发的</code>, <code>给CAN上其它VESC发从而控制其它VESC的</code>, 以及<code>给所有CAN设备发的电调状态反馈</code>.</li>
+<li>同理, <strong>解码后的信息</strong>可以分为: <code>主控的命令</code>, <code>其它VESC的命令</code>, <code>其它VESC的状态反馈</code>.</li>
+</ul>
+<h5 id="CAN功能执行情况"><a href="#CAN功能执行情况" class="headerlink" title="CAN功能执行情况"></a>CAN功能执行情况</h5><ul>
+<li><code>读取</code>, <code>解码</code>放在<strong>分别的两个线程</strong>中执行. 对于<code>发送</code>环节, 一部分是紧接着解码的代码, 解码出需要发送的命令即发送; 另一部分在<strong>单独的<code>状态反馈</code>的线程</strong>中发送; 还有极少一部分在代码各处被直接调用发送函数发送. <em><code>编码</code>都在发送前完成</em>.</li>
+<li>以上提到的三个线程(<code>读取</code>, <code>解码</code>, <code>状态反馈</code>)在main函数的初始化过程中即被开启.</li>
+</ul>
+<h5 id="CAN帧的id"><a href="#CAN帧的id" class="headerlink" title="CAN帧的id"></a>CAN帧的id</h5><ul>
+<li>CAN帧采用扩展id, <code>extended id</code>, 其中包含的信息为<strong>VESC的编号</strong>(1~128)和<strong>这条帧的命令</strong>. 帧的内容是根据命令进行编码的, 在接收端需要有<strong>从eid中读取识别命令</strong>并<strong>采用正确解码方法</strong>的功能.</li>
+<li>从主控发出的控制VESC的CAN帧, 和从VESC发出控制VESC的CAN帧, 应该是一样的, 也就是说<em>VESC不区分是谁发的CAN消息, 总线上有消息让它做什么它就做什么.</em></li>
+</ul>
+<h4 id="USB相关"><a href="#USB相关" class="headerlink" title="USB相关"></a>USB相关</h4><ul>
+<li>四个文件, <code>comm_usb_serial.c/.h</code>和<code>comm_usb.c/.h</code>, 其中<code>comm_usb_serial.c/.h</code>被 <code>comm_usb.c/.h</code>调用, <em>直接被外界函数调用的只有 <code>comm_usb.c/.h</code></em>.</li>
+<li>USB主要是用于与上位机通信, 主要编码和解码都在<code>commands.c/.h</code>中; 其发送和接收一份信息是<em>以<code>packet</code>为单位</em>, 所以<code>packet.c/.h</code>基本是为了USB而存在的.</li>
+<li>USB的<em>发送和接收底层直接通过<code>ChiBiOS</code>实现.</em></li>
+</ul>
+<h4 id="commands-packet相关"><a href="#commands-packet相关" class="headerlink" title="commands, packet相关"></a>commands, packet相关</h4><ul>
+<li>四个文件, <code>commands.c/.h</code>, <code>packet.c/.h</code>. 这里的<code>command</code>是一种框架, 依靠这个框架运行的部分除了USB以外还有潜在的<code>nrf51</code>, <code>BMS</code>, <code>LISP</code>等. 这些通信方式发送信息的基本单位都是<code>packet</code>, 所以<code>packet.c/.h</code>提供一些通用的处理方法.</li>
+<li><code>BMS</code>是电池管理系统<code>battery managing system</code>, <code>LISP</code>像是一种指令集, 电调与上位机的互动大量依靠这个东西, 之后会研究.</li>
+<li>我很想研究清楚一个USB的<code>packet</code>是如何被产生和发送的, 但是这一坨文件写的太复杂了, 很多关键的函数为了通用性, 使用了大量函数指针, 按照我现有的功力还理不清楚. USB通信的实现方式不是重点, 只能就此作罢, 以后再说吧.</li>
+</ul>
+<h4 id="log相关"><a href="#log相关" class="headerlink" title="log相关"></a>log相关</h4><ul>
+<li>两个文件, <code>log.c/.h</code>. 功能主要是<em>提供一套工具, 将任意采集到的数据转化为作图规则</em>, 然后通过以上提到的任意一种通信方式发送出去.</li>
+<li>关键函数只提供转化方法, 似乎想要画图, 在这个函数之外还要计算好横轴和纵轴数据, 单次<strong>packet</strong>发送仅仅包含这一个点的数据.</li>
+<li>整份代码中函数被调用的地方看起来只有与上位机互动的部分(用LISP实现).<br><del>- 由于packet可以通过CAN发送, 所以当上位机通过USB连接一个VESC时, 这个VESC可以通过CAN帮助其它VESC转发画图数据到上位机.</del>  &#x2F;&#x2F; 真实性存疑, 先划掉<br><del>- (板间通信这一块本杰明做的还是很周到的)</del></li>
+</ul>
+<h3 id="documentation"><a href="#documentation" class="headerlink" title="documentation"></a>documentation</h3><ul>
+<li><em>里面就一个CAN协议的说明文档, 想了解CAN是如何编码和解码的, 以及要写对应库函数的, 必看.</em></li>
+</ul>
+<h3 id="driver"><a href="#driver" class="headerlink" title="driver"></a>driver</h3><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC151.png"></p>
+<ul>
+<li>一系列硬件外设的<strong>底层驱动</strong>. 其中<code>IIC</code>和<code>SPI</code>均以软件方式实现, <code>servo</code>指的是舵机(不知道为什么这东西需要无刷电机电调来控制).</li>
+<li>我觉得比较有意思的是<code>timer.c/.h</code>. 这个文件中定义的函数在<em>全局都有调用</em>, 核心函数的功能是获取当前系统tick, 或者理解为时间刻, 在之后可以用这个保存下来的时间刻与当前时间刻比较, <em>计算出流逝时间</em>. 既然可以<em>计算时间</em>, 那么用处就很大了, 例如<em>实现精准延时, 超时检测</em>.</li>
+</ul>
+<h3 id="encoder"><a href="#encoder" class="headerlink" title="encoder"></a>encoder</h3><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC150.png"></p>
+<ul>
+<li>一系列<strong>编码器</strong>的<strong>底层驱动代码</strong>.</li>
+<li>拿我熟悉的<code>as5047</code>来举例, 驱动代码包含了<strong>编码器初始化函数</strong>(也就是<code>SPI</code>的初始化)和<strong>编码器角度读取函数</strong>(一次完整的<code>SPI</code>通信). 每当我们在上位机中将编码器设置为<code>as5047</code>时, 会跑一遍初始化函数, 之后<em>角度读取函数会被放在一个线程中轮询执行</em>.</li>
+</ul>
+<h3 id="hwconf"><a href="#hwconf" class="headerlink" title="hwconf"></a>hwconf</h3><ul>
+<li><em>全是硬件配置</em>, 分为自定义部分, 电机驱动芯片驱动部分, mcu配置部分, 硬件操作部分.</li>
+</ul>
+<h4 id="自定义部分"><a href="#自定义部分" class="headerlink" title="自定义部分"></a>自定义部分</h4><ul>
+<li>首先是自定义部分, 那一堆文件夹里装的是<em>不同硬件方案的配置</em>, 我用过的有<code>makerbase</code>, <code>flipsky</code>, 以及我自己有一版和别人合作的硬件方案<code>LIMITI</code>. <code>example</code>是一个模板文件, 是根据自己的硬件方案自定义软件方案的开始.<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC149.png"></li>
+<li>以<code>makerbase</code>的为例, <em>一个硬件方案的固件版本的自定义内容通常包含两个<code>core</code>, 一个<code>全名.h</code></em><br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC148.png"></li>
+<li><code>core</code>文件包含了<strong>独特的硬件信息</strong>:<ol>
+<li><code>.h文件</code>中篇幅最大的部分是关键的<strong>GPIO口如何分配</strong>. 例如mcu有两组以上空闲的GPIO口可用作<code>软件SPI</code>, 那么驱动芯片<code>DRV8301</code>要用那一组?<br><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC147.png"><br>这个问题有如上<strong>宏定义</strong>来说明, 电调启动后<em>硬件进行初始化的时候才有依据</em>.</li>
+<li><code>.c文件</code>的主要是<em>写硬件初始化的具体流程</em>. 不同硬件方案上的硬件不只是型号有差别, 有些硬件是可以直接没有的, 例如非必要的<code>nrf</code>或<code>imu</code>. 此时在<code>.c文件</code>中<em>写清楚哪些硬件要初始化</em>就很重要.<br> 例如, 我有一版软件尝试禁用<code>mcu</code>与<code>drv8301</code>的<code>SPI通信</code>, 以及去掉不需要的<code>shutdown</code>口, 那么硬件初始化就这样写:<br> <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC146.png"></li>
+</ol>
+</li>
+<li><code>全名.h</code>文件的主要作用是在编译固件的时候, <em>标识不同版本的固件</em>, 否则有这么多版固件, 不知道要编译那一版. 例如我想编译原版<code>vesc6</code>的第5版, 则在终端中输入<br>  <code>make 60_mk5</code><br>  想编译我自己固件的第二版, 则输入<br>  <code>make LIMITI_60_mk2</code></li>
+</ul>
+<h4 id="电机驱动芯片驱动部分"><a href="#电机驱动芯片驱动部分" class="headerlink" title="电机驱动芯片驱动部分"></a>电机驱动芯片驱动部分</h4><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC145.png"></p>
+<ul>
+<li>主要是绿色框内的一系列drv电机驱动芯片, 至于<code>si8900</code>, 我搜了一下没搜到相关信息, 不确定是不是电机驱动芯片.</li>
+</ul>
+<h4 id="MCU配置部分"><a href="#MCU配置部分" class="headerlink" title="MCU配置部分"></a>MCU配置部分</h4><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC144.png"></p>
+<ul>
+<li>大概是除了引脚之外所有关于<code>stm32f405</code>(MCU)的配置吧, 我看到了晶振频率的<strong>宏定义</strong>,<code> ADC</code>和<code>DMA</code>相关的<strong>宏定义</strong>, 至少这些挺重要的.</li>
+</ul>
+<h4 id="硬件操作部分"><a href="#硬件操作部分" class="headerlink" title="硬件操作部分"></a>硬件操作部分</h4><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC143.png"></p>
+<ul>
+<li>两个文件, <code>hw.c/.h</code>. 这个也是hardware, 点进去也有一堆硬件相关的<strong>宏定义</strong>, 我为什么要叫它<strong>硬件操作部分</strong>? 原因是:<ol>
+<li><code>hw.c</code>的内容很少, 就是一个计算<code>uuid</code>的函数, 一般来说不会去动它; </li>
+<li><code>hw.h</code>里绝大多数都是<strong>关于硬件的操作的宏定义</strong>, 而且很多都是空的. 我想本杰明在这里留空, 是他的原版固件不用这些宏定义, 但是如果你想用可以自己填上自己用.</li>
+</ol>
+</li>
+<li>例如这一堆<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC142.png"><br>  <code>AUX</code>和<code>PHASE_FILTER</code>是需要<strong>额外硬件支持</strong>才能使用的. 原版<code>vesc6</code>没有<code>AUX接口</code>, 直到<code>mk6</code>之前没有<code>PHASE_FILTER</code>, 但是<em>如果你自己有合理的硬件方案, 那么可以使用他预留好的宏定义</em>, 只需要填入相关操作(例如写GPIO)再编译即可.</li>
+</ul>
+<h4 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h4><ul>
+<li>还剩一个<code>shutdown.c/.h</code>没讲, 这份文件像一个废案, 或者也是额外可以开启的功能, 总之原版没有使用. 文件中函数的功能简单概括, 是在你的电动滑板运行一段距离并停止后, 自动给当前配置和其它信息存个档(写<code>flash</code>). <em>其实没啥用, 我又不是拿来做电动滑板的</em>. (真的吗🤔)</li>
+</ul>
+<h3 id="imu"><a href="#imu" class="headerlink" title="imu"></a>imu</h3><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC141.png"></p>
+<ul>
+<li>由于本人没用过在VESC上的<code>IMU</code>, 之前没有仔细研究过, 但是由于过往还是接触过IMU, 略微了解一点点<code>IMU</code>的知识. 上图绿框是有意思的部分, 包括<code>Madgwick的AHRS算法</code>, 以及封装好的<code>IMU接口函数</code>; 蓝色框内是各种<code>IMU的驱动库</code>, 目前VESC原生支持的<code>IMU</code>有: <code>mpu9x50</code>, <code>icm20948</code>, <code>bmi160(spi+iic)</code>, <code>lsm6ds3</code>.</li>
+<li>图中的<code>Fusion文件夹</code>中的内容也属于<code>AHRS算法</code>的一部分.</li>
+</ul>
+<h3 id="libcanard"><a href="#libcanard" class="headerlink" title="libcanard"></a>libcanard</h3><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC140.png"></p>
+<ul>
+<li><code>UAVCAN</code>相关的, 从来没用过相关功能, 完全不懂</li>
+</ul>
+<h3 id="lispBM"><a href="#lispBM" class="headerlink" title="lispBM"></a>lispBM</h3><ul>
+<li>存放<code>lispBM</code>相关的代码, 不是很懂还需学习<br><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC139.png"></li>
+</ul>
+<h3 id="make"><a href="#make" class="headerlink" title="make"></a>make</h3><ul>
+<li>存放大多数<code>make</code>文件, 没具体学过看不懂捏<br><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC138.png"></li>
+</ul>
+<h3 id="motor"><a href="#motor" class="headerlink" title="motor"></a>motor</h3><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC137.png"></p>
+<ul>
+<li><em>最重要的一集</em>, 分为以下几部分:</li>
+</ul>
+<h4 id="mc-interface-c-h"><a href="#mc-interface-c-h" class="headerlink" title="mc_interface.c&#x2F;h"></a>mc_interface.c&#x2F;h</h4><ul>
+<li>这两个文件里面全是<strong>接口函数</strong>, 包括<strong>控制</strong>电机速度, 位置, 占空比, <strong>查询</strong>当前速度, 位置, 占空比这类<strong>基础操作函数</strong>, 也有在<strong>ADC采样周期</strong>结束后会执行的函数.<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC136.png"><br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC135.png"><br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC134.png"></li>
+<li><em>一般想要实现自定义操作, 调用其中的函数已经足够, 自定义的函数也可以写在里面</em>.</li>
+</ul>
+<h4 id="foc部分"><a href="#foc部分" class="headerlink" title="foc部分"></a>foc部分</h4><ul>
+<li>两组文件, <code>foc_math.c/h</code>和<code>mcpwm_foc.c/h</code><br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC133.png"></li>
+<li><code>foc_math</code>中主要是<em>一系列<code>PID</code>的运算, <code>SVPWM</code>的运算, <code>观测器</code>的更新</em>等等, 倒是<em>没有FOC主要的计算部分</em>(<code>park变换</code>, <code>clark变换</code>).<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC132.png"></li>
+<li><code>mcpwm_foc</code>中<em>有具体<code>FOC运算</code></em>, 与<strong>读取ADC采样值</strong>的过程放在一个函数中, <em>紧接着采样结束后执行</em>:<ul>
+<li>这个<code>adc_int_handler</code>是最重要的一个函数, 包含采样以及FOC计算过程:<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC131.png"><br>  <code>clark变换</code><br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC128.png"><br>  <code>park变换</code>和<code>SVPWM</code><br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC129.png"></li>
+<li>有一部分是foc控制的一些<em>接口</em>, 和<code>interface.c/h</code>中的基本一致<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC127.png"></li>
+<li>还有一部分是<em>电机整定相关的几个函数</em>, 其中关于<strong>有感位置整定</strong>(<code>encoder_detect</code>), <em>我已经详细分析过</em>, 详见上篇文章:  <strong>VESC学习之FOC有感整定代码</strong>. 其他的还需学习.<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC126.png"></li>
+</ul>
+</li>
+</ul>
+<h4 id="非foc部分"><a href="#非foc部分" class="headerlink" title="非foc部分"></a>非foc部分</h4><ul>
+<li>剩下的有<code>mcpwm.c/h</code>, 推测这一组是用<strong>传统方法</strong>控制<code>BLDC</code>的; 还有一组<code>virtual_motor.c/h</code>, 不太清楚是干嘛的.</li>
+</ul>
+<h3 id="Project"><a href="#Project" class="headerlink" title="Project"></a>Project</h3><ul>
+<li><code>Qt框架</code>的部分, 详情如下<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC125.png"></li>
+</ul>
+<h3 id="tools"><a href="#tools" class="headerlink" title="tools"></a>tools</h3><ul>
+<li>存放编译固件需要的环境和编译器<br><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC124.png"></li>
+</ul>
+<h3 id="util"><a href="#util" class="headerlink" title="util"></a>util</h3><ul>
+<li>存放各种<strong>工具库函数</strong>的地方, 例如<code>buffer.c/h</code>, 包含各种将字节填充进数组的函数;<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC122.png"><br>  <code>utils.c/h</code>, 包含各种数值映射和限幅等函数<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC123.png"></li>
+<li>这些工具函数在之后的<code>foc</code>, <code>pid</code>, <code>编码器读取</code>等环节被反复调用. 虽然很多工具函数很简单, 但是<em>将一种操作统一为工具函数这种表达方式, 使代码可读性更高</em>.</li>
+</ul>
+<h3 id="bms-c-h"><a href="#bms-c-h" class="headerlink" title="bms.c&#x2F;h"></a>bms.c&#x2F;h</h3><ul>
+<li>电源管理系统(<code>battery managing system</code>)的代码, 仔细看了下感觉没啥用. 内容很少, 只有一个相关结构体的初始化, 设置数据和读取数据, 并没有直接执行某种功能的函数.<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC121.png"></li>
+</ul>
+<h3 id="chconf-h"><a href="#chconf-h" class="headerlink" title="chconf.h"></a>chconf.h</h3><ul>
+<li><code>chibiOS</code>的一些配置参数, 比较常见的例如这个:<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC120.png"><br>  <code>系统tick</code>, <em>计算时间可能会用到(是否也暗示了操作系统最高频率是10000Hz?)</em></li>
+</ul>
+<h3 id="conf-custom-c-h-conf-general-c-h"><a href="#conf-custom-c-h-conf-general-c-h" class="headerlink" title="conf_custom.c&#x2F;h, conf_general.c&#x2F;h"></a>conf_custom.c&#x2F;h, conf_general.c&#x2F;h</h3><ul>
+<li>一些配置, 主要是涉及电调版本, 上位机UI显示, 还有一些主要用于与上位机交互的接口函数(详见下文<code>terminal.c/h</code>)<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC119.png"><br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC118.png"><br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC117.png"></li>
+<li>这些接口函数实现的功能在<code>interface.c/h</code>中全都有, 当然有些<code>interface.c/h</code>的函数是靠调用这里对应的函数来实现.</li>
+<li><em>VESC的版本号像是给电调固件开发者辨识版本用的</em>. 例如上图中的<code>23</code>是<strong>小版本号</strong>, 对原版编译内容没有任何影响, 但是开发过程中, <em>开发人员可以用小版本号区分一些小改动</em>, 编译出固件后, 也可以<em>用小版本号区分具有微小差别的固件</em>.</li>
+<li><code>conf_custom</code>是留给进一步定制用的, 原版对固件内容没有影响.</li>
+</ul>
+<h3 id="confgenerator-c-h"><a href="#confgenerator-c-h" class="headerlink" title="confgenerator.c&#x2F;h"></a>confgenerator.c&#x2F;h</h3><ul>
+<li>*VESC中, 有两个重要的(同时也很巨大的)结构体, 一个用来存放所有的app设置(<code>appconf</code>), 一个用来存放所有的motor_control设置(<code>mcconf</code>). *</li>
+<li>使用<code>VESC tool</code>控制VESC时, 经常要将两个<code>conf</code>从上位机传到电调, 或者从电调读取到上位机, 数据传输的过程被VESC称为<code>serialize</code>和<code>deserialize</code>.</li>
+<li><em><code>serialize</code>本质上是将结构体的内容逐个塞入一个超大的<code>buffer</code>, 然后发送出去, 而<code>deserialize</code>是按照约定好的顺序将数据按顺序读取出来.</em></li>
+<li>如果<code>serialize</code>和<code>deserialize</code>的<em>规则对不上</em>, 则会出现读取数据读的牛头不对马嘴😰, 例如将电机参数中的电感值读成了电阻值. </li>
+<li>有时用老的<code>VESC tool</code>读取烧录了新版本固件的电调的数据时, 会提示<code>deserialize fail</code>, 就是因为新版本固件和老版本<code>VESC tool</code>的规则对不上了,* 两边此时传递任何数据都可能是错的, 所以完全无法操作, 防止执行了包含错误参数的命令导致严重后果*.</li>
+<li>这一对文件, 包含了两个<code>conf</code>的<code>serialize</code>和<code>deserialize</code>规则.<br><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC116.png"></li>
+</ul>
+<h3 id="datatype-h"><a href="#datatype-h" class="headerlink" title="datatype.h"></a>datatype.h</h3><ul>
+<li><em>祖宗级别的文件, 存放了绝大多数VESC在执行核心功能时会用到的结构体和枚举类型</em>, 例如上文提到的<code>mcconf</code>和<code>appconf</code>, 还有CAN通信的各种命令类型, 使用一个叫<code>CAN_PACKET_ID</code>的枚举类型存放.</li>
+<li>我在自定义电机控制功能的时候, 修改过<code>mcconf</code>和<code>CAN_PACKET_ID</code>. 修改<code>mcconf</code>时加了一个结构体到最末尾, 结合上文的论述, 这种操作可能导致固件与上位机通信时<code>deserialize</code>有问题, 毕竟单方面加入了内容而上位机不知道, 不过目前从没有出过问题(<em>我推测在<code>serialize</code>的时候代码不会把conf中多余的末尾加进去</em>). 修改<code>CAN_PACKET_ID</code>让我能<em>利用现有CAN通信框架的同时, 保证代码的一致性和可读性.</em></li>
+<li>我还在里面写过自己的结构体, 并且将其成功存入内存池中, 开机即可从<code>flash</code>中读取上次的数据. <em>闲着没事可以在<code>datatype.h</code>里找一个感兴趣的类型看看在哪里被调用过.</em><br><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC115.png"><br><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC113.png"><br><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC114.png"></li>
+</ul>
+<h3 id="event-c-h"><a href="#event-c-h" class="headerlink" title="event.c&#x2F;h"></a>event.c&#x2F;h</h3><ul>
+<li>顾名思义, 事件管理的文件, 但是这里似乎与程序正常运行没有太大关系, 更像是<em>为了调试方便, 记录各种重要事件并在终端打印出来</em>.</li>
+<li>可以看到, 原版固件中有如下事件类型:<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC112.png"></li>
+</ul>
+<h3 id="firmware-metadata-h"><a href="#firmware-metadata-h" class="headerlink" title="firmware_metadata.h"></a>firmware_metadata.h</h3><ul>
+<li>意义不明捏~</li>
+</ul>
+<h3 id="flash-helper-c-h"><a href="#flash-helper-c-h" class="headerlink" title="flash_helper.c&#x2F;.h"></a>flash_helper.c&#x2F;.h</h3><ul>
+<li>虽然能顾名思义认为是辅助读写mcu的<code>flash</code>的库函数, 真进去看也像那么回事情, 但是实际上这个库没有特别有用的接口, <em>这些接口在电调正常运行, 不与外界通信的时候基本不会被调用</em>.</li>
+<li>之前我写过flash, 调用的是<code>conf_general</code>里定义的哪个. <em>包括原版固件储存和读取数据时, 最终还是使用<code>driver</code>文件夹中<code>eeprom.c/h</code>中的内容.</em></li>
+</ul>
+<h3 id="hal-conf"><a href="#hal-conf" class="headerlink" title="hal_conf"></a>hal_conf</h3><ul>
+<li>一堆宏定义, 看了一下有大多数没有被引用, 少部分被<code>chibiOS</code>的相关的文件引用, 想必对我这种简单开发者没有什么深究的必要啦~</li>
+</ul>
+<h3 id="irq-handlers-c-isr-vector-table-h"><a href="#irq-handlers-c-isr-vector-table-h" class="headerlink" title="irq_handlers.c &#x2F; isr_vector_table.h"></a>irq_handlers.c &#x2F; isr_vector_table.h</h3><ul>
+<li><code>irq_handlers.c</code><em>将mcu产生的中断向量与要执行的代码相对应</em>(这么表达足够清晰准确吗??). 文件内容明了, 某个中断向量(例如<code>ADC1_2_3_IRQHandler</code>)对应一个需要在中断内执行的函数, 如下图:<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC111.png"></li>
+<li><code>isr_vector_table.h</code>是一张<strong>向量映射表</strong>, 经过我初步研究, 我推测这是<em>将<code>mcu裸机</code>的中断向量映射到<code>chibiOS</code>的中断向量, 这样执行中断就不用回到裸机, 而是裸机中断-&gt;操作系统中断-&gt;操作系统中执行. 好处是避免潜在的代码执行优先级和资源调度的冲突.</em><br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC110.png"></li>
+</ul>
+<h3 id="ld-eeprom-emu-ld"><a href="#ld-eeprom-emu-ld" class="headerlink" title="ld_eeprom_emu.ld"></a>ld_eeprom_emu.ld</h3><p><img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC19.png"></p>
+<ul>
+<li><em>代码在mcu内存空间中映射的规则</em>, 编译时候会用到. 文件中提及的mcu型号是<code>STM32F407</code>, 虽然我用过的电调是<code>STM32F405</code>, 但是内存空间的映射规则应该是一样的.<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC18.png"></li>
+</ul>
+<h3 id="main-c-h"><a href="#main-c-h" class="headerlink" title="main.c&#x2F;h"></a>main.c&#x2F;h</h3><ul>
+<li><em>最最祖宗的一集</em>, 程序入口<code>main</code>在这里, 还定义了一些初始化会用到的函数和线程. <code>main</code>函数中有一大堆初始化, 操作系统初始化完成后, 就可以进行需要执行线程的初始化, 例如<code>CAN收发</code>, <code>FOC</code>, <code>ADC采样</code>等. <code>main</code>函数最后是死循环跑一个<code>chThdSleepMilliseconds(10),</code> 此时裸机不再执行任何步骤, 操作系统已经接管一切资源.</li>
+<li><em><code>main</code>函数具体内容之后单开文章来研究</em>.</li>
+</ul>
+<h3 id="Makefile-package-firmware-py"><a href="#Makefile-package-firmware-py" class="headerlink" title="Makefile &#x2F; package_firmware.py"></a>Makefile &#x2F; package_firmware.py</h3><ul>
+<li><code>Makefile</code>用于编译, 而<code>package_firmware.py</code><em>似乎是用于生成编译路径的</em>.</li>
+<li>过去我的自定义固件改了名字但是没有加入<code>package_firmware.py</code>的字典, 并且偶尔会出现改了代码但是编译出来的固件没有对应功能的情况, 或者直接编译时缺失关键文件, 会不会就是这里没有搞定?😵<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC17.png"></li>
+</ul>
+<h3 id="两个cfg文件"><a href="#两个cfg文件" class="headerlink" title="两个cfg文件"></a>两个cfg文件</h3><ul>
+<li>没看懂是啥.</li>
+</ul>
+<h3 id="terminal-c-h"><a href="#terminal-c-h" class="headerlink" title="terminal.c&#x2F;h"></a>terminal.c&#x2F;h</h3><ul>
+<li>涉及到<em>与上位机终端的信息交互和处理</em>. <code>VESC tool</code>中有一个终端, 可以向VESC发送命令方便调试. 但是平常我们都用的图形化界面操作来代替手打指令, 所以不常用.</li>
+<li><em>即使是<code>VESC tool</code>中图形化界面的操作, 本质上还是发送这一组指令</em>, 所以这对C文件的内容还是挺重要的. 文件包含接收终端指令处理, 向终端反馈错误信息, 自定义指令这些内容.</li>
+</ul>
+<ol>
+<li>接收指令处理内容最多, <em>给所有类型的指令写了执行内容</em>, 例子如下:<ul>
+<li>帮助指令<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC16.png"></li>
+<li>推测是下载某个电机参数到电调上时, 会发送的指令<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC15.png"></li>
+<li>推测是让电调控制电机旋转测磁链时, 会发送的指令<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC13.png"></li>
+<li>注意到<em>终端命令的执行调用了很多<code>conf_general.c</code>里的函数. 同时大量调用了<code>commands.c</code>中的<code>commands_printf</code>函数.</em></li>
+</ul>
+</li>
+<li>反馈错误信息包含在接收指令处理中, 当执行一个指令产生<code>FAULT_CODE</code>后, 将<code>FAULT_CODE</code>存在<code>fault_vec</code>中, 时机合适时再打印到终端. (似乎这个数组并没有被太多调用, <em>多数报错是直接获取当前错误就上报了</em>)<br> <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC14.png"></li>
+<li>自定义指令是通过将某个指令与程序中某函数绑定在一起实现的, 要实现通过终端来操作, 可能需要一个函数名字符串向函数指针的映射(似乎在<code>lispBM</code>相关代码内见过).<br> <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC159.png"></li>
+</ol>
+<h3 id="timeout-c-h"><a href="#timeout-c-h" class="headerlink" title="timeout.c&#x2F;h"></a>timeout.c&#x2F;h</h3><ul>
+<li>主要内容是<em>防止电机跑飞, 超时自动刹车, 以及喂看门狗</em>. </li>
+<li>我改过这方面的代码, 将看门狗设置为无条件喂(除非操作系统跑崩), 主要原因是之前改固件的时候, 改了一个不相关的部分, 但是老是报看门狗错误. 由于是很久之前改的了, 不太清楚原版是不是一直喂狗的, 我也懒得下载源码来看😄 </li>
+<li><code>timeout.c/h</code>中会<em>跑一个线程, 随时检测<code>last_update_time</code>距离现在是否超过了超时限制, 若超过则刹停电机</em>. (线程最后还会喂狗)<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC11.png"></li>
+<li>固件的各个线程中, 有些<em>体量比较大的函数在开头, 中间, 和结尾处可能会调用<code>timeout_reset()</code>这个函数, 重置<code>last_update_time</code></em>. 若长时间不更新这个<code>last_update_time</code>, 说明某个关键函数卡住了, 此时电机必须停止.<br>  <img src="/2025/05/14/VESC%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%901%EF%BC%9A%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E6%80%BB%E8%A7%88/VESC12.png"></li>
+</ul>
+<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><ul>
+<li>终于写完了, 好累, 有一瞬间想骂人😡</li>
+<li>前前后后耗时三个星期左右, 期间遇到困难一直拖延. 去上海度假回来终于振作起来, 一口气搞完了. 希望能对我接下来学习VESC有所帮助吧.</li>
+<li>这项工程好像是蚍蜉撼树, 好像对我找工作没太大帮助, 好像是理想主义的一次冲锋. 我不清楚我做的是否”最优”和”正确”, 我已经疲于思考这些问题. 至少有开头有结尾, 写完后的内心是平静如水的, 这样就好, 无论做什么事情, 最终是追求精神的宁静和自洽.</li>
+</ul>
+
+    </article>
+    
+  </div>
+  <div class="article-catelogue">
+    <div class="article-catelogue--wrapper">
+      <div class="catelogue catelogue-1">
+        <h3>目录</h3>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BA%E4%BB%B6%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8"><span class="toc-number">2.</span> <span class="toc-text">固件文件列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#applications"><span class="toc-number">3.</span> <span class="toc-text">applications</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E7%9A%84%E9%83%A8%E5%88%86"><span class="toc-number">3.1.</span> <span class="toc-text">重要的部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%90%86%E8%A7%A3%E4%BD%86%E6%98%AF%E6%B2%A1%E6%B7%B1%E7%A9%B6%E7%9A%84%E9%83%A8%E5%88%86"><span class="toc-number">3.2.</span> <span class="toc-text">理解但是没深究的部分</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#blackmagic"><span class="toc-number">4.</span> <span class="toc-text">blackmagic</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%99%E4%B8%AA%E6%98%AF%E7%9C%9F%E4%B8%8D%E6%87%82-%E8%AF%B4%E4%B8%80%E4%B8%8B%E5%A4%A7%E6%A6%82%E7%90%86%E8%A7%A3"><span class="toc-number">4.1.</span> <span class="toc-text">这个是真不懂, 说一下大概理解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ChiBiOS-3-0-5"><span class="toc-number">5.</span> <span class="toc-text">ChiBiOS_3.0.5</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A1%BE%E5%90%8D%E6%80%9D%E4%B9%89-%E8%BF%99%E4%B8%AA%E6%98%AF%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%89%80%E5%9C%A8%E7%9A%84%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">5.1.</span> <span class="toc-text">顾名思义, 这个是操作系统所在的文件夹</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EChiBiOS-%E4%BB%A5%E5%90%8E%E6%9C%89%E7%A9%BA%E4%BC%9A%E8%BF%9B%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%9C%B0%E5%AD%A6%E4%B9%A0"><span class="toc-number">5.2.</span> <span class="toc-text">关于ChiBiOS, 以后有空会进行系统地学习</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#comm"><span class="toc-number">6.</span> <span class="toc-text">comm</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CAN%E7%9B%B8%E5%85%B3"><span class="toc-number">6.1.</span> <span class="toc-text">CAN相关</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">6.1.1.</span> <span class="toc-text">消息的分类</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CAN%E5%8A%9F%E8%83%BD%E6%89%A7%E8%A1%8C%E6%83%85%E5%86%B5"><span class="toc-number">6.1.2.</span> <span class="toc-text">CAN功能执行情况</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#CAN%E5%B8%A7%E7%9A%84id"><span class="toc-number">6.1.3.</span> <span class="toc-text">CAN帧的id</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#USB%E7%9B%B8%E5%85%B3"><span class="toc-number">6.2.</span> <span class="toc-text">USB相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#commands-packet%E7%9B%B8%E5%85%B3"><span class="toc-number">6.3.</span> <span class="toc-text">commands, packet相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#log%E7%9B%B8%E5%85%B3"><span class="toc-number">6.4.</span> <span class="toc-text">log相关</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#documentation"><span class="toc-number">7.</span> <span class="toc-text">documentation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#driver"><span class="toc-number">8.</span> <span class="toc-text">driver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#encoder"><span class="toc-number">9.</span> <span class="toc-text">encoder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hwconf"><span class="toc-number">10.</span> <span class="toc-text">hwconf</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%83%A8%E5%88%86"><span class="toc-number">10.1.</span> <span class="toc-text">自定义部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B5%E6%9C%BA%E9%A9%B1%E5%8A%A8%E8%8A%AF%E7%89%87%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86"><span class="toc-number">10.2.</span> <span class="toc-text">电机驱动芯片驱动部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MCU%E9%85%8D%E7%BD%AE%E9%83%A8%E5%88%86"><span class="toc-number">10.3.</span> <span class="toc-text">MCU配置部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E6%93%8D%E4%BD%9C%E9%83%A8%E5%88%86"><span class="toc-number">10.4.</span> <span class="toc-text">硬件操作部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E5%AE%83"><span class="toc-number">10.5.</span> <span class="toc-text">其它</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#imu"><span class="toc-number">11.</span> <span class="toc-text">imu</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#libcanard"><span class="toc-number">12.</span> <span class="toc-text">libcanard</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lispBM"><span class="toc-number">13.</span> <span class="toc-text">lispBM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#make"><span class="toc-number">14.</span> <span class="toc-text">make</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#motor"><span class="toc-number">15.</span> <span class="toc-text">motor</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#mc-interface-c-h"><span class="toc-number">15.1.</span> <span class="toc-text">mc_interface.c&#x2F;h</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#foc%E9%83%A8%E5%88%86"><span class="toc-number">15.2.</span> <span class="toc-text">foc部分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%9Efoc%E9%83%A8%E5%88%86"><span class="toc-number">15.3.</span> <span class="toc-text">非foc部分</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Project"><span class="toc-number">16.</span> <span class="toc-text">Project</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tools"><span class="toc-number">17.</span> <span class="toc-text">tools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#util"><span class="toc-number">18.</span> <span class="toc-text">util</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bms-c-h"><span class="toc-number">19.</span> <span class="toc-text">bms.c&#x2F;h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chconf-h"><span class="toc-number">20.</span> <span class="toc-text">chconf.h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#conf-custom-c-h-conf-general-c-h"><span class="toc-number">21.</span> <span class="toc-text">conf_custom.c&#x2F;h, conf_general.c&#x2F;h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#confgenerator-c-h"><span class="toc-number">22.</span> <span class="toc-text">confgenerator.c&#x2F;h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#datatype-h"><span class="toc-number">23.</span> <span class="toc-text">datatype.h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#event-c-h"><span class="toc-number">24.</span> <span class="toc-text">event.c&#x2F;h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#firmware-metadata-h"><span class="toc-number">25.</span> <span class="toc-text">firmware_metadata.h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flash-helper-c-h"><span class="toc-number">26.</span> <span class="toc-text">flash_helper.c&#x2F;.h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hal-conf"><span class="toc-number">27.</span> <span class="toc-text">hal_conf</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#irq-handlers-c-isr-vector-table-h"><span class="toc-number">28.</span> <span class="toc-text">irq_handlers.c &#x2F; isr_vector_table.h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ld-eeprom-emu-ld"><span class="toc-number">29.</span> <span class="toc-text">ld_eeprom_emu.ld</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#main-c-h"><span class="toc-number">30.</span> <span class="toc-text">main.c&#x2F;h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Makefile-package-firmware-py"><span class="toc-number">31.</span> <span class="toc-text">Makefile &#x2F; package_firmware.py</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AAcfg%E6%96%87%E4%BB%B6"><span class="toc-number">32.</span> <span class="toc-text">两个cfg文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#terminal-c-h"><span class="toc-number">33.</span> <span class="toc-text">terminal.c&#x2F;h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#timeout-c-h"><span class="toc-number">34.</span> <span class="toc-text">timeout.c&#x2F;h</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-number">35.</span> <span class="toc-text">写在最后</span></a></li></ol>
+      </div>
+      
+        <div class="catelogue catelogue-2">
+           
+          
+            <p>
+              <span>下一篇</span>
+              <a href="/2025/05/11/VESC学习之FOC有感整定代码/">VESC学习之FOC有感整定代码</a>
+            </p>
+          
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+  $(document).on('pjax:complete', function() {
+    const tocs = document.querySelector('.toc')
+    const links = tocs ? tocs.querySelectorAll('a') : []
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        const href = decodeURIComponent(e.href)
+        href.search(/#(.*)/)
+        const id = RegExp.$1
+        const target = document.querySelector('#' + id)
+        const top = target.offsetTop
+        document.documentElement.scrollTo({
+          top: top - 100,
+          behavior: 'smooth'
+        })
+        e.preventDefault()
+      })
+    })
+  })
+</script> 
+
+</div>
+      <div class="main-right-wrapper"><div class="main-right">
+  <div class="main-right--board">
+    <div class="main-right--title">
+      <h5>公告栏</h5>
+      <i class="iconfont icon-gonggao"></i>
+    </div>
+    <div class="main-right--content">
+      电兵一个 
+    </div>
+  </div>
+
+  <div id="aplayer" class="main-right--music"></div>
+
+  <div class="operate-items">
+    <div class="operate-item backtop">
+      <i class="iconfont icon-huidaodingbu"></i>
+      <span>回到顶部</span>
+    </div>
+    
+  </div>
+
+  <div class="main-right--site">
+    <div class="main-right--power">
+      <p>Power By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a>.</p>
+      <p>Theme：<a target="_blank" rel="noopener" href="https://github.com/Aizener/hexo-theme-cola">Cola.</a></p>
+    </div>
+    <p class="main-right--refer"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/#/Integrated/index">蜀ICP备2022005384号-1</a> </p>
+  </div>
+</div>
+
+<script>
+  function setOperateItem () {
+    const reg = /\d{4}\/\d{2}\/\d{2}\/.+/
+    const path = location.pathname
+    const operateDom = document.querySelector('.main-right .operate-items')
+    const commentDom = document.querySelector('.turn-comment')
+    const cateloguDom = document.querySelector('.article-catelogue > .article-catelogue--wrapper');
+
+    if (commentDom) {
+      if (reg.test(path) || path.match(/\/log\/.+/)) {
+        commentDom.classList.remove('hidden')
+        const newDom = operateDom.cloneNode(true);
+        const _backtopDom = newDom.querySelector('.backtop');
+        const _commentDom = newDom.querySelector('.turn-comment');
+        _backtopDom.addEventListener('click', () => backTopEvent());
+        _commentDom.addEventListener('click', () => commentDomEvent());
+        cateloguDom.appendChild(newDom);
+      } else {
+        commentDom.classList.add('hidden')
+      }
+    }
+  }
+
+  setOperateItem()
+  const musics = JSON.parse(`[{"name":"You're Not The Only One I Know","artist":"The Sundays","url":"music/You're Not The Only One I Know.flac","cover":"https://img.discogs.com/NvfJb9ygLElF3ORDHTy1ZFtMnKE=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-1573808-1316777764.jpeg.jpg"}]`)
+  const ap = new APlayer({
+    container: document.querySelector('#aplayer'),
+    audio: musics,
+  })
+
+  $(document).on('pjax:complete', function() {
+    setOperateItem()
+  })
+
+  document.querySelector('.backtop').addEventListener('click', () => {
+    backTopEvent();
+  })
+  const dom = document.querySelector('.turn-comment')
+  dom && dom.addEventListener('click', () => {
+    commentDomEvent();
+  })
+
+  function backTopEvent() {
+    document.documentElement.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
+  function commentDomEvent() {
+    const commentDom = document.querySelector('.comments-intro')
+    if (!commentDom) return
+    const top = commentDom.offsetTop, height = commentDom.offsetHeight
+    document.documentElement.scrollTo({
+      top: top - 2 * height,
+      behavior: 'smooth'
+    })
+  }
+</script></div>
+    </section>
+  </div>
+  <div id="progress" class="progress"></div>
+  <div id="gray" class="gray"></div>
+
+  <script>
+    function initScroll () {
+      document.addEventListener('scroll', () => {
+        const doc = document.documentElement
+        const scrollTop = doc.scrollTop
+        const pageHeight = doc.offsetHeight
+        const clientHeight = doc.clientHeight
+        const ratio = scrollTop / (pageHeight - clientHeight)
+        const progress = document.querySelector('#progress')
+        const avatarImg = document.querySelector('.main-left--avatar')
+        progress.style.width = (100 * ratio) + '%'
+        avatarImg.style.transform = `rotate(${360 * ratio}deg)`
+      })
+    }
+
+    const rootPath = "/"
+
+    const checkAndSetArticlePageLayout = () => {
+      const path = location.pathname.replace(rootPath, '');
+      if (
+        /^\/?\d{4}\/\d{2}\/\d{2}\/.*/.test(path) ||
+        /^log\/.+/.test(path)
+      ) {
+        $('.main-container, .main-right, .main-right-wrapper').addClass('is-article')
+      } else {
+        $('.main-container, .main-right, .main-right-wrapper').removeClass('is-article')
+      }
+    }
+
+    const gray = "none"
+    const setGrayStyle = () => {
+      if (gray === 'none') {
+        return
+      } else if (gray === 'index') {
+        location.pathname === '/' ? $('#gray').show() : $('#gray').hide()
+      } else if (gray === 'all') {
+        $('#gray').show()
+      }
+    }
+    setGrayStyle()
+
+
+    window.onload = function () {
+      checkAndSetArticlePageLayout()
+      setTimeout(() => {
+        $('#load').slideUp()
+        $('#container').slideToggle()
+        setTimeout(() => {
+          initScroll();
+        }, 500)
+      }, 500)
+    }
+    
+    let status = 0
+    // 对所有链接跳转事件绑定pjax容器container
+    $(document).pjax('a[target!=_blank]', '#main-container', {
+      container: '#main-container',
+      fragment: '#main-container',
+      timeout: 8000
+    })
+
+    $(document).on('pjax:start', function() {
+    })
+    $(document).on('pjax:complete', function() {
+      status = 0
+      $('.main-container').addClass('to-up').on('animationend', function() {
+        $(this).removeClass('to-up')
+      })
+      setGrayStyle()
+      checkAndSetArticlePageLayout()
+    })
+    $(document).on('pjax:popstate', function() {
+      status = -1
+      checkAndSetArticlePageLayout()
+    });
+  </script>
+</body>
+</html>
