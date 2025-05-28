@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>夏远的个人主页——超前补偿器设计 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="/imgs/xiayuan_icon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/public.css" />
+  <link rel="stylesheet" href="/css/layout.css" />
+  <link rel="stylesheet" href="/css/iconfont.css" />
+  <link rel="stylesheet" href="/css/APlayer.min.css" />
+  <script src="/js/APlayer.min.js"></script>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/jquery.pjax.min.js"></script>
+
+  <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+  <script>
+    document.title = `夏远的个人主页——超前补偿器设计`
+  </script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<style>
+  .load {
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(37, 35, 40);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 9999;
+  }
+  .load-circle {
+    width: 80px;
+    height: 80px;
+    border: 8px solid orange;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: rotate 1s linear infinite;
+    filter: drop-shadow(0 0 3px orange);
+  }
+  .load-circle-inner {
+    width: 40px;
+    height: 40px;
+    border: 8px solid orange;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: rotate-reverse .5s linear infinite;
+  }
+  .load-text {
+    margin-top: 20px;
+    font-size: 24px;
+    color: orange;
+    display: flex;
+  }
+  .load-text span {
+    margin: 0 5px;
+    text-shadow: 5px 5px 5px orange;
+    animation: move 1s linear infinite;
+  }
+  .load-text span:nth-child(1) {
+    animation-delay: -0.6s;
+  }
+  .load-text span:nth-child(2) {
+    animation-delay: -0.5s;
+  }
+  .load-text span:nth-child(3) {
+    animation-delay: -0.4s;
+  }
+  .load-text span:nth-child(4) {
+    animation-delay: -0.3s;
+  }
+  .load-text span:nth-child(5) {
+    animation-delay: -0.2s;
+  }
+  .load-text span:nth-child(6) {
+    animation-delay: -0.1s;
+  }
+  @keyframes rotate {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes rotate-reverse {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(-360deg); }
+  }
+  @keyframes move {
+    0% { transform: translateY(0%) rotate(0) scale(1); }
+    20% { transform: translateY(20%) rotate(10deg) scale(1.2); }
+    80% { transform: translateY(-10%) rotate(-20deg) scale(.8);}
+    100% { transform: translateY(0) rotate(0) scale(1); }
+  }
+
+  .progress {
+    position: fixed;
+    left: 0; top: 0;
+    width: 0;
+    height: 3px;
+    background-color: green;
+    transition: all cubic-bezier(0.215, 0.610, 0.355, 1) .1s;
+    z-index: 9999;
+  }
+
+  .to-up {
+    animation: toUp .5s 1;
+  }
+  .gray {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 9999;
+    display: none;
+    pointer-events: none;
+    background-color: #000;
+    mix-blend-mode: color;
+  }
+  @keyframes toUp {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0) ; opacity: 1; }
+  }
+</style>
+<body>
+  <div id="load" class="load">
+    <div class="load-circle">
+      <div class="load-circle-inner"></div>
+    </div>
+    <p class="load-text">
+      <span>L</span>
+      <span>O</span>
+      <span>A</span>
+      <span>D</span>
+      <span>I</span>
+      <span>N</span>
+      <span>G</span>
+    </p>
+  </div>
+  <div id="container" class="container w-100 vh-100" style="display: none;">
+    <header class="header">
+  <div class="header-wrapper">
+    <div class="header-left">
+      <div class="header-search">
+        <input id="search-input" type="text" class="header-search--input" placeholder="请输入要检索的文章标题" />
+        <span id="search-btn" class="header-search--icon"><i class="iconfont icon-sousuo"></i></span>
+      </div>
+      <div id="search-layer" class="header-search--layer hidden">
+        <p class="title">
+          <span>以下是搜索内容：</span>
+          <span id="close-layer-btn">关闭</span>
+        </p>
+        <ul>
+        </ul>
+      </div>
+    </div>
+    <div class="header-right">
+      <ul class="header-menu">
+        <li>
+          <a href="http://example.com/">
+            <i class="header-menu--icon iconfont icon-shouye"></i>
+            <span class="header-menu--span">首页</span>
+          </a>
+        </li>
+        <li>
+          <a href="http://example.com/log">
+            <i class="header-menu--icon iconfont icon-rizhi"></i>
+            <span class="header-menu--span">日志</span>
+          </a>
+        </li>
+        <li>
+          <a href="http://example.com/link">
+            <i class="header-menu--icon iconfont icon-youqinglianjie"></i>
+            <span class="header-menu--span">友情链接</span>
+          </a>
+        </li>
+        <li>
+          <a href="http://example.com/about">
+            <i class="header-menu--icon iconfont icon-guanyuwomen"></i>
+            <span class="header-menu--span">关于我</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<script>
+  const ipt = document.querySelector('#search-input')
+  const btn = document.querySelector('#search-btn')
+  const layer = document.querySelector('#search-layer')
+  const posts = JSON.parse(`[{"title":"10.10.2024凌晨 熬夜看比赛之反思","path":"2024/10/10/10-10-2024凌晨-熬夜看比赛之反思/"},{"title":"10.14.2024 总结","path":"2024/10/15/10-14-2024-总结/"},{"title":"10.15.2024 总结 10.16.2024要做的事","path":"2024/10/16/10-15-2024-总结-10-16-2024要做的事/"},{"title":"10.16.2024学到的东西，第二天要做的事情","path":"2024/10/17/10-16-2024学到的东西，第二天要做的事情/"},{"title":"10.15.2024学到的东西 & 关于 人生堆栈 项目落地的急迫性","path":"2024/10/16/10-15-2024学到的东西-关于-人生堆栈-项目落地的急迫性/"},{"title":"10.16.2024总结","path":"2024/10/17/10-16-2024总结/"},{"title":"10.17.2024总结","path":"2024/10/18/10-17-2024总结/"},{"title":"10.178.2024学到的东西和今天要做的事情","path":"2024/10/18/10-17-2024学到的东西和今天要做的事情/"},{"title":"10.18.2024学到的东西 & 今天要做的事","path":"2024/10/19/10-18-2024学到的东西-今天要做的事/"},{"title":"10.18.2024总结","path":"2024/10/19/10-18-2024总结/"},{"title":"10.19.2024学到的东西 & 今天要做的事情","path":"2024/10/20/10-19-2024学到的东西-今天要做的事情/"},{"title":"10.19.2024总结","path":"2024/10/20/10-19-2024总结/"},{"title":"10.20.2024学到的东西 & 今天要做的事情","path":"2024/10/21/10-20-2024学到的东西-今天要做的事情/"},{"title":"10.20.2024总结","path":"2024/10/21/10-20-2024总结/"},{"title":"10.21.2024学到的东西 & 今天要做的事情","path":"2024/10/22/10-21-2024学到的东西-今天要做的事情/"},{"title":"10.21.2024总结","path":"2024/10/22/10-21-2024总结/"},{"title":"10.25.2024 研究大数据课设时学到的关于回归问题的一些知识","cover":"/images/covers/pythonMeme1.png","path":"2024/10/26/10-25-2024-研究大数据课设时学到的关于回归问题的一些知识/"},{"title":"10.8.2024 总结","path":"2024/10/08/10-8-2024-总结/"},{"title":"10.8.2024 早上上了传感器的课程","path":"2024/10/08/10-8-2024-早上上了传感器的课程/"},{"title":"2025.3~2025.9 学习清单","cover":"/images/covers/2025.3 学习计划.jpg","path":"2025/03/18/2025-3-2025-9-学习清单/"},{"title":"Bode图1","cover":"/images/covers/bode225.png","path":"2025/03/26/Bode图1/"},{"title":"Bode图2  手绘bode图","cover":"/images/covers/bode225.png","path":"2025/03/26/Bode图2 手绘bode图/"},{"title":"FOC与SVPWM学习1","cover":"/images/covers/foc1.png","path":"2025/03/16/FOC与SVPWM学习1/"},{"title":"FOC与SVPWM学习2","cover":"/images/covers/foc2_cover.png","path":"2025/03/17/FOC与SVPWM学习2/"},{"title":"FOC与SVPWM学习3","cover":"/images/covers/just_a_motor.png","path":"2025/03/18/FOC与SVPWM学习3/"},{"title":"FOC与SVPWM学习4","cover":"/images/covers/foc43.png","path":"2025/03/19/FOC与SVPWM学习4/"},{"title":"FOC学习之SVPWM","cover":"/images/covers/SVPWM2.png","path":"2025/05/07/FOC学习之SVPWM/"},{"title":"Nyquist稳定准则","cover":"/images/covers/nygif3.gif","path":"2025/04/17/Nyquist稳定准则/"},{"title":"PID, 结合根轨迹调参","cover":"/images/covers/pid_cover.png","path":"2025/04/17/PID-结合根轨迹调参/"},{"title":"PID控位置环，两环和三环的区别","path":"2025/05/26/PID控位置环，两环和三环的区别/"},{"title":"Routh-Hurwitz Criterion 劳斯判据","cover":"/images/covers/rh_criterion_cover.png","path":"2025/03/29/Routh-Hurwitz-Criterion-劳斯判据/"},{"title":"VECS代码分析2: FOC部分","cover":"/images/covers/VESC.png","path":"2025/05/15/VECS代码分析2：FOC部分/"},{"title":"VESC代码分析1：固件文件总览","cover":"/images/covers/VESC.png","path":"2025/05/14/VESC代码分析1：固件文件总览/"},{"title":"Hello World","path":"2024/09/29/hello-world/"},{"title":"VESC学习之FOC有感整定代码","cover":"/images/covers/VESC_ENC_DETECT10.png","path":"2025/05/11/VESC学习之FOC有感整定代码/"},{"title":"hexo之还是想把博客的tag搞起来 10.16.2024晚","cover":"/images/covers/neko_confusing.gif","path":"2024/10/16/hexo之还是想把博客的tag搞起来-10-16-2024晚/"},{"title":"hexo博客中插入图片测试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo博客中插入图片测试/"},{"title":"hexo博客建设之为每个post单独设置封面的尝试","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之为每个post单独设置封面的尝试/"},{"title":"hexo博客建设之修复空白页 & 第一次尝试添加一个index.html","cover":"/images/covers/neko_confusing.gif","path":"2024/10/19/hexo博客建设之修复空白页-第一次尝试添加一个index-html/"},{"title":"hexo博客建设之开启新的页面","cover":"/images/covers/neko_confusing.gif","path":"2024/10/22/hexo博客建设之开启新的页面/"},{"title":"hexo基本命令","cover":"/images/covers/neko_confusing.gif","path":"2024/09/29/hexo基本命令/"},{"title":"hexo插入图片测试之二","cover":"/images/covers/neko_confusing.gif","path":"2024/10/08/hexo插入图片测试之二/"},{"title":"hexo更改主题，以及修改主题的实践","cover":"/images/covers/neko_confusing.gif","path":"2024/10/11/hexo更改主题，以及修改主题的实践/"},{"title":"国庆的挣扎","path":"2024/10/07/国庆的挣扎/"},{"title":"关于电机线缆长度对控制效果的影响","cover":"/images/covers/just_a_motor.png","path":"2025/04/17/关于电机线缆长度对控制效果的影响/"},{"title":"夏远的第一篇博客","path":"2024/09/29/夏远的第一篇博客/"},{"title":"我急需审视自己的一些东西","path":"2024/10/14/我急需审视自己的一些东西/"},{"title":"对傅里叶变换和级数的全新理解","cover":"/images/covers/ft8.png","path":"2025/03/21/对傅里叶变换和级数的全新理解/"},{"title":"敏感度, 敏感度函数, 调整敏感度","path":"2025/05/28/敏感度, 敏感度函数, 调整敏感度/"},{"title":"整理桌面，顺便换一张壁纸","path":"2024/10/11/整理桌面，顺便换一张壁纸/"},{"title":"根轨迹介绍与手绘根轨迹","cover":"/images/covers/rl213.png","path":"2025/04/07/根轨迹介绍与手绘根轨迹/"},{"title":"根轨迹补充","cover":"/images/covers/rls18.png","path":"2025/04/17/根轨迹补充/"},{"title":"滞后补偿器设计","path":"2025/05/28/滞后补偿器设计/"},{"title":"系统稳定性 闭环系统的稳定性","cover":"/images/covers/syssta1.png","path":"2025/03/29/系统稳定性-闭环系统的稳定性/"},{"title":"终值定理和稳态误差","cover":"/images/covers/fv5.png","path":"2025/03/29/终值定理和稳态误差/"},{"title":"超前滤波器, 滞后滤波器, 补偿器","path":"2025/05/28/超前滤波器, 滞后滤波器, 补偿器/"},{"title":"超前补偿器设计","path":"2025/05/28/超前补偿器设计/"},{"title":"迟到的10.10.2024总结","path":"2024/10/11/迟到的10-10-2024总结/"},{"title":"过去两天的总结，以及今天的计划","path":"2024/10/14/过去两天的总结，以及今天的计划/"},{"title":"闭环系统的稳定裕度","cover":"/images/covers/sysmar_cover.png","path":"2025/04/17/闭环系统的稳定裕度/"}]`)
+  ipt.addEventListener('keyup', e => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  })
+  btn.addEventListener('click', () => {
+    handleSearch()
+  })
+
+  document.querySelector('#close-layer-btn').addEventListener('click', () => {
+    layer.classList.toggle('hidden')
+  })
+
+  function handleSearch() {
+    if (ipt.value.trim() === '') {
+      return
+    }
+    let html = ''
+    const targetPosts = posts.filter(post => post.title.includes(ipt.value))
+    targetPosts.forEach(post => {
+      html += `
+        <li>
+          <div>
+            <a href="/${post.path}">${post.title.replace(new RegExp(ipt.value), `<span>${ipt.value}</span>`)}</a>
+          </div>
+          <img src="${post.cover || '/imgs/default-cover.webp' }" />
+        </li>
+      `
+    })
+    if (html.trim () === '') {
+      html += '<p class="empty">没有搜索到内容</p>'
+    }
+    layer.querySelector('ul').innerHTML = html
+    layer.classList.remove('hidden')
+  }
+</script> 
+    <section id="main" class="main">
+      <div class="main-left-wrapper">
+<div class="main-left">
+  <div class="main-left--block">
+    <div class="main-left--info">
+      <img src="/imgs/avatar.jpg"" class="main-left--avatar" />
+      <div class="main-left--intro">
+        <p class="main-left--name">xiayuan</p>
+        <div class="main-left--tags">
+          <span class="main-left--tag">阴暗</span>
+          <span class="main-left--tag">爬行</span>
+        </div>
+      </div>
+    </div>
+  
+    <div>
+      <div class="main-left--motto">
+        <p>“今日比昨日更善良”</p>
+        <p>“明日比今日更繁忙”</p>
+      </div>
+      <div class="main-left--github">
+        <span class="line"></span>
+        <a target="_blank" rel="noopener" href="https://github.com/xtzhyhydwl"><i class="logo iconfont icon-github-fill"></i></a>
+        <span class="line"></span>
+      </div>
+      <div class="main-left--statics">
+        <a href="/categories">
+          <div>
+            <span>0</span>
+            <span>分类</span>
+          </div>
+        </a>
+        <a href="/tags">
+          <div>
+            <span>7</span>
+            <span>标签</span>
+          </div>
+        </a>
+        <a href="/archives">
+          <div>
+            <span>5 </span>
+            <span>归档</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-left--block">
+    <ul class="main-left--menu">
+      
+        <li>
+          <a href="/">
+            <span class="header-menu--span">小站首页</span>
+            <i class="header-menu--icon iconfont icon-shouye"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/log">
+            <span class="header-menu--span">个人日志</span>
+            <i class="header-menu--icon iconfont icon-rizhi"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/link">
+            <span class="header-menu--span">友情链接</span>
+            <i class="header-menu--icon iconfont icon-youqinglianjie"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/about">
+            <span class="header-menu--span">关于自己</span>
+            <i class="header-menu--icon iconfont icon-guanyuwomen"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a href="/tools">
+            <span class="header-menu--span">我的工具</span>
+            <i class="header-menu--icon iconfont icon-gongju"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+  <div class="main-left--block">
+    <div class="main-left--site">
+      <h5 class="main-left--title">
+        <span>站点信息</span>
+        <i class="iconfont icon-zhandian"></i>
+      </h5>
+      <p class="main-left--subtitle">
+        <span>文章数目：</span>
+        <span>60 篇</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>最近动态：</span>
+        <span>今天</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>上线时间：</span>
+        <span>242天</span>
+      </p>
+      <p class="main-left--subtitle">
+        <span>当前版本：</span>
+        <span>v1.0.0</span>
+      </p>
+    </div>
+  </div>
+</div></div>
+      <div id="main-container" class="main-container">
+
+
+  <link rel="stylesheet" href="/css/partial/article.css" />
+
+<div class="article-container">
+  <div class="article">
+    <h1 class="article-title">超前补偿器设计</h1>
+    <div class="article-info">
+      <div class="article-info--item">
+        <div class="article-info--info">
+          
+          <div class="article-info--categories">
+            <span>分类：</span>
+            
+          </div>
+          
+          
+          <div class="article-info--tags">
+            <span>标签：</span>
+            <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a><a class="tag-link" href="/tags/%E8%87%AA%E5%8A%A8%E6%8E%A7%E5%88%B6%E5%8E%9F%E7%90%86/" rel="tag">自动控制原理</a>
+          </div>
+          
+          <p class="article-info--date">日期：2025-05-28 09:46:15</p>
+        </div>
+        <img src="/imgs/default-cover.webp" alt="" class="article-cover">
+      </div>
+    </div>
+    <article class="article-content markdown-body">
+      <ul>
+<li>假设我们完成了补偿器设计步骤的前两步, 即拥有正确的开环系统函数, 并且选择了超前补偿器, 接下来讲解如何计算超前补偿器的参数, 即如何设计补偿器的零点和极点位置, 使它们对闭环系统极点位置有正确的影响.</li>
+</ul>
+<h3 id="补充知识-主导极点-Dominant-Pole"><a href="#补充知识-主导极点-Dominant-Pole" class="headerlink" title="补充知识: 主导极点 Dominant Pole"></a>补充知识: 主导极点 Dominant Pole</h3><ul>
+<li>有时我们能看到这样的描述: “表现为二阶系统的高阶系统”, 这样的系统能被近似为二阶系统来处理, 是因为有一对主导极点在决定系统的性质. </li>
+<li>在高阶系统中, 距离虚轴最近的那一对极点是主导极点, 原因如下:<ul>
+<li>如图的二阶系统中, 两个极点分别对应不同的脉冲响应, 但是它们都是指数衰减<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd08.png"><br>  可见, 距离虚轴更远的极点(绿色极点), 脉冲响应衰减很快, 而距离虚轴更近的极点(蓝色极点), 脉冲响应衰减较慢. 将两者叠加起来, 我们能发现蓝色极点主导了脉冲响应的形状, 因为绿色极点对应的响应总是很快就衰减得很小了. 所以我们认为蓝色极点是主导极点.</li>
+<li>如图的高阶系统有很多极点, 但是有一对极点距离虚轴明显比其它极点都近. 结合前文推导, 我们可以想到这对极点对于脉冲响应的形状具有主导作用. 所以他们是主导极点, 并且使系统表现得像二阶系统.<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd09.png"></li>
+</ul>
+</li>
+</ul>
+<h3 id="补充知识-为什么我们期待高阶系统表现为二阶系统"><a href="#补充知识-为什么我们期待高阶系统表现为二阶系统" class="headerlink" title="补充知识: 为什么我们期待高阶系统表现为二阶系统?"></a>补充知识: 为什么我们期待高阶系统表现为二阶系统?</h3><ul>
+<li>我们对系统的性能要求, 例如上升时间, 稳定时间, 通常可以转化为阻尼比和固有频率的代数组合, 而阻尼比＋固有频率的组合能使我们方便地确定极点位置, 这样一来, 性能需求到极点位置的转化就很轻松. 例如上升时间<code>t_r</code>可以计算如下:<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd10.png"></li>
+<li>问题是上述轻松的转化方法仅限于二阶系统或表现为二阶系统的高阶系统. 所以我们期待高阶系统表现出二阶系统, 否则要得知应该把极点放在哪里不会是一件简单的事情.</li>
+</ul>
+<h3 id="使用根轨迹"><a href="#使用根轨迹" class="headerlink" title="使用根轨迹"></a>使用根轨迹</h3><h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><ul>
+<li>使用根轨迹来设计超前补偿器, 最直观的思路是将闭环增益作为变化的参量, 设计超前滤波器的零点和极点位置, 使根轨迹穿过系统需求对应的极点位置, 最后算出使极点移动到正确位置的增益, 即完成了补偿器的设计.</li>
+</ul>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><blockquote>
+<p>举例如下, 我们有一个开环系统, 打算为它设计一个超前补偿器<br><img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd11.png"><br>黄色轨迹是根轨迹, 可见对系统进行单纯的闭环控制并不能使极点移动到目标位置处, 换句话说, 根轨迹不穿过那个位置. 接下来, 通过引入超前补偿器, 我们能将跟根轨迹扭曲一下, 让它穿过目标点.</p>
+</blockquote>
+<ul>
+<li>一个在开环根轨迹上的点α, 具有以下规律: 有点类似与Nyquist plot那一套, α与极点连线的夹角之和, 减去α与零点连线的夹角之和, 等于180°<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd12.png"><br>  用这个规律, 我们可以先将超前补偿器的零点放在一个合理的位置, 然后通过角度的计算得到超前滤波器极点的位置.</li>
+<li>如何找到超前补偿器零点的放置位置? 它可不能随便放, 举两个极端的例子:<ul>
+<li>我们把零点放到无穷远处, 然后观察那个判断某一点α是否在根轨迹上的角度公式, 我们能发现在上面具体的例子中, 目标极点位置α与两个开环极点连线的夹角之和为225°. 由于零点与α夹角近似为0, 减去这个角度, 夹角之和仍然为225°, 而我们还有一个补偿器的极点没有放置, 也就是说最终夹角之和必定大于等于225°, 这意味着α不可能在根轨迹上. 只有零点的位置产生了足够的夹角, 减去这个夹角, 使夹角之和能够小于180°, 才能使α有在根轨迹上的可能性.<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd13.png"></li>
+<li>我们把零点放在很偏右的位置, 此时零点产生的夹角确实足够了, 但是最终计算出的补偿器的极点的位置可能比原来的开环极点还要靠近虚轴, 这样会改变系统的主导极点, 破坏系统是二阶系统这一属性. 介于我们已经讨论过二阶系统的重要性, 这种做法是得不偿失的.<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd14.png"></li>
+<li>所以零点的摆放位置应该介于两者之间.</li>
+</ul>
+</li>
+<li>针对这个例子, 正确解法如下:<ol>
+<li>选择合适的零点位置, 例如(-4, 0j)<br> <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd15.png"></li>
+<li>根据零点位置得到角度信息, 根据角度信息计算极点位置<br> <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd16.png"></li>
+<li>用一些方法计算出闭环增益, 例如使用matlab<br> <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd17.png"></li>
+</ol>
+</li>
+</ul>
+<h3 id="补充知识-超前补偿器的特点"><a href="#补充知识-超前补偿器的特点" class="headerlink" title="补充知识: 超前补偿器的特点"></a>补充知识: 超前补偿器的特点</h3><ul>
+<li>给开环系统设计闭环的超前补偿器后, 系统仍然有不稳定的可能性, 因为在一些高阶系统中, 加入超前补偿器可能会使一些本来稳定的极点移动到右半区.</li>
+<li>一般来说, 我们应该先尝试PID控制器, 因为它更直观, 当PID不能完成任务时再考虑超前补偿器</li>
+<li>使用超前补偿器的系统响应相比PID更快, 但是无法消除稳态误差, 而且会放大高频噪声.</li>
+</ul>
+<h3 id="使用bode-plot来设计"><a href="#使用bode-plot来设计" class="headerlink" title="使用bode plot来设计"></a>使用bode plot来设计</h3><h4 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h4><ul>
+<li>使用root locus根轨迹来设计超前补偿器, 需要我们先将性能需求转换为极点位置, 而使用bode plot来设计, 需要我们将性能需求转换到频域上, 频域上的指标有相位裕度, 增益裕度, 带宽, 截止频率, 零频率幅值, 稳态误差(利用终值定理求得), 如下图<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd18.png"><br>  图片有错, 带宽是增益为-3dB时的频率, 重新截图太麻烦懒得搞了:-p</li>
+<li>一旦能把需求转移为频域的指标, 接下来只要操纵bode plot的形状, 即可满足需求</li>
+</ul>
+<h4 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h4><blockquote>
+<p>设系统需求为单位斜坡响应的稳态误差<code>e_ss</code> &lt; 0.02, 相位裕度<code>pm</code> &gt; 48°, 开环系统函数为 1 &#x2F; (0.2s + 1). </p>
+</blockquote>
+<ul>
+<li>有稳态误差和相位裕度两个需求, 我们一般先解决稳态误差, 因为稳态误差的约束可能需要加入积分器, 如果先设计了相位裕度, 积分器会对相位产生影响, 那就白设计了.</li>
+<li>这里需要特别对稳态误差的计算做复习. 本人学习的时候搞半天没理解为什么2型系统能够0误差追踪斜坡输入, 我之前做笔记的时候也没有认真学习和记录这一点, 所以几乎没有印象, 下附关键公式:<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd19.png"><br>  根据题目<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd20.png"><br>  从上到下分别是 原系统&#x2F;原点加1个极点&#x2F;原点加2个极点 的稳态误差, 由此可见开环系统确实无法跟踪阶跃信号. 我们要满足稳态误差的需求, 首先要让系统从type 0变为type 1以上的系统. </li>
+<li>然而系统类型并不是越高越好, 原点处加入极点, 在现实意义上的是有开销的, 这里给出稳态误差的要求并不为0, 所以我们把它设计成有误差的就行, 没必要追求0误差. 于是我们向系统加入一个积分器, 使其从type 0变为type 1.<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd21.png"></li>
+<li>根据<code>e_ss</code> &lt; 0.02, 注意到闭环增益k直接影响<code>e_ss</code>大小, 带入闭环增益k计算稳态误差, 考虑k的取值范围如下:<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd22.png"><br>  为了计算方便, 取k &#x3D; 50.</li>
+<li>我们已经满足了稳态误差的需求, 接下来将系统组合起来画出bode plot, 分析相位裕度<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd23.png"><br>  可见相位裕度为18°, 不满足需求, 接下来该超前滤波器出手了.</li>
+<li>画出超前滤波器的bode plot, 可以看到它只对特定频域的相位超前, 如果我们能将这个频率设定在转折频率附近, 那就能起到在衡量相位裕度的频率附近增加相位, 而不影响其它频率的效果		<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd24.png"><br>  值得注意的是, 它会在转折频率附近增加增益, 导致转折频率略微右移.</li>
+<li>要设计合适的超前滤波器, 就需要知道滤波器的数学表达式中, 包含了哪些关于滤波器形状的信息. 相位超前滤波器可以写成这个形式:<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd25.png"><br>  为什么写成这样? 因为可以根据这些参数了解到滤波器的形状:<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd26.png"><br>  比较关键形状参数的就是相位超前滤波器作用的中心频率, 超前的相位, 以及这个频率下增加的增益. 设计步骤在图片右下角, 很清晰了.</li>
+<li>设计滤波器时, 滤波器超前的最大相位不能仅仅设计得刚好满足需求, 因为引用滤波器会带来额外的增益, 导致实际转折频率右移. 设计的相位超前刚好够用, 实际应用上以后转折频率偏移, 实际相位裕度又不够用了. 所以设计最大相位的时候要留一些余量, 或者用一系列参数反复尝试直到频率偏移后, 相位裕度仍然够用.</li>
+<li>最终设计的超前补偿器如下:<br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd27.png"><br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd28.png"><br>  <img src="/2025/05/28/%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E8%AE%BE%E8%AE%A1/llcd29.png"><br>  可见相位在我们需要的地方有一个滑稽的突起, 满足了我们的所有需求.<br>  Brian在最后也提到, 虽然理论上相位超前滤波器能提供最大90°的超前, 但是从实际设计来看, 最大超前约为55°, 否则硬件设计将会变得不实用. 如果想要55°以上的超前, 级联两个滤波器即可.</li>
+</ul>
+
+    </article>
+    
+  </div>
+  <div class="article-catelogue">
+    <div class="article-catelogue--wrapper">
+      <div class="catelogue catelogue-1">
+        <h3>目录</h3>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E7%9F%A5%E8%AF%86-%E4%B8%BB%E5%AF%BC%E6%9E%81%E7%82%B9-Dominant-Pole"><span class="toc-number">1.</span> <span class="toc-text">补充知识: 主导极点 Dominant Pole</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E7%9F%A5%E8%AF%86-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%BB%AC%E6%9C%9F%E5%BE%85%E9%AB%98%E9%98%B6%E7%B3%BB%E7%BB%9F%E8%A1%A8%E7%8E%B0%E4%B8%BA%E4%BA%8C%E9%98%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.</span> <span class="toc-text">补充知识: 为什么我们期待高阶系统表现为二阶系统?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%A0%B9%E8%BD%A8%E8%BF%B9"><span class="toc-number">3.</span> <span class="toc-text">使用根轨迹</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">3.1.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-number">3.2.</span> <span class="toc-text">实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E7%9F%A5%E8%AF%86-%E8%B6%85%E5%89%8D%E8%A1%A5%E5%81%BF%E5%99%A8%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">4.</span> <span class="toc-text">补充知识: 超前补偿器的特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8bode-plot%E6%9D%A5%E8%AE%BE%E8%AE%A1"><span class="toc-number">5.</span> <span class="toc-text">使用bode plot来设计</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1"><span class="toc-number">5.1.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-1"><span class="toc-number">5.2.</span> <span class="toc-text">实例</span></a></li></ol></li></ol>
+      </div>
+      
+        <div class="catelogue catelogue-2">
+          
+            <p>
+              <span>上一篇：</span>
+              <a href="/2025/05/28/超前滤波器, 滞后滤波器, 补偿器/">超前滤波器, 滞后滤波器, 补偿器</a>
+            </p>
+           
+          
+            <p>
+              <span>下一篇</span>
+              <a href="/2025/05/26/PID控位置环，两环和三环的区别/">PID控位置环，两环和三环的区别</a>
+            </p>
+          
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+  $(document).on('pjax:complete', function() {
+    const tocs = document.querySelector('.toc')
+    const links = tocs ? tocs.querySelectorAll('a') : []
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        const href = decodeURIComponent(e.href)
+        href.search(/#(.*)/)
+        const id = RegExp.$1
+        const target = document.querySelector('#' + id)
+        const top = target.offsetTop
+        document.documentElement.scrollTo({
+          top: top - 100,
+          behavior: 'smooth'
+        })
+        e.preventDefault()
+      })
+    })
+  })
+</script> 
+
+</div>
+      <div class="main-right-wrapper"><div class="main-right">
+  <div class="main-right--board">
+    <div class="main-right--title">
+      <h5>公告栏</h5>
+      <i class="iconfont icon-gonggao"></i>
+    </div>
+    <div class="main-right--content">
+      电兵一个 
+    </div>
+  </div>
+
+  <div id="aplayer" class="main-right--music"></div>
+
+  <div class="operate-items">
+    <div class="operate-item backtop">
+      <i class="iconfont icon-huidaodingbu"></i>
+      <span>回到顶部</span>
+    </div>
+    
+  </div>
+
+  <div class="main-right--site">
+    <div class="main-right--power">
+      <p>Power By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a>.</p>
+      <p>Theme：<a target="_blank" rel="noopener" href="https://github.com/Aizener/hexo-theme-cola">Cola.</a></p>
+    </div>
+    <p class="main-right--refer"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/#/Integrated/index">蜀ICP备2022005384号-1</a> </p>
+  </div>
+</div>
+
+<script>
+  function setOperateItem () {
+    const reg = /\d{4}\/\d{2}\/\d{2}\/.+/
+    const path = location.pathname
+    const operateDom = document.querySelector('.main-right .operate-items')
+    const commentDom = document.querySelector('.turn-comment')
+    const cateloguDom = document.querySelector('.article-catelogue > .article-catelogue--wrapper');
+
+    if (commentDom) {
+      if (reg.test(path) || path.match(/\/log\/.+/)) {
+        commentDom.classList.remove('hidden')
+        const newDom = operateDom.cloneNode(true);
+        const _backtopDom = newDom.querySelector('.backtop');
+        const _commentDom = newDom.querySelector('.turn-comment');
+        _backtopDom.addEventListener('click', () => backTopEvent());
+        _commentDom.addEventListener('click', () => commentDomEvent());
+        cateloguDom.appendChild(newDom);
+      } else {
+        commentDom.classList.add('hidden')
+      }
+    }
+  }
+
+  setOperateItem()
+  const musics = JSON.parse(`[{"name":"サンダルリープ","artist":"Orangestar,IA","url":"music/サンダルリープ.mp3","cover":"/imgs/SEASIDE%20SOLILOQUIES.jpg"},{"name":"apple flavoured feeling of friendship","artist":"Corn Wave","url":"music/Corn Wave - apple flavoured feeling of friendship.flac","cover":"/imgs%20/elephant%20entertainment.jpg"},{"name":"You're Not The Only One I Know","artist":"The Sundays","url":"music/You're Not The Only One I Know.flac","cover":"https://img.discogs.com/NvfJb9ygLElF3ORDHTy1ZFtMnKE=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-1573808-1316777764.jpeg.jpg"}]`)
+  const ap = new APlayer({
+    container: document.querySelector('#aplayer'),
+    audio: musics,
+  })
+
+  $(document).on('pjax:complete', function() {
+    setOperateItem()
+  })
+
+  document.querySelector('.backtop').addEventListener('click', () => {
+    backTopEvent();
+  })
+  const dom = document.querySelector('.turn-comment')
+  dom && dom.addEventListener('click', () => {
+    commentDomEvent();
+  })
+
+  function backTopEvent() {
+    document.documentElement.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
+  function commentDomEvent() {
+    const commentDom = document.querySelector('.comments-intro')
+    if (!commentDom) return
+    const top = commentDom.offsetTop, height = commentDom.offsetHeight
+    document.documentElement.scrollTo({
+      top: top - 2 * height,
+      behavior: 'smooth'
+    })
+  }
+</script></div>
+    </section>
+  </div>
+  <div id="progress" class="progress"></div>
+  <div id="gray" class="gray"></div>
+
+  <script>
+    function initScroll () {
+      document.addEventListener('scroll', () => {
+        const doc = document.documentElement
+        const scrollTop = doc.scrollTop
+        const pageHeight = doc.offsetHeight
+        const clientHeight = doc.clientHeight
+        const ratio = scrollTop / (pageHeight - clientHeight)
+        const progress = document.querySelector('#progress')
+        const avatarImg = document.querySelector('.main-left--avatar')
+        progress.style.width = (100 * ratio) + '%'
+        avatarImg.style.transform = `rotate(${360 * ratio}deg)`
+      })
+    }
+
+    const rootPath = "/"
+
+    const checkAndSetArticlePageLayout = () => {
+      const path = location.pathname.replace(rootPath, '');
+      if (
+        /^\/?\d{4}\/\d{2}\/\d{2}\/.*/.test(path) ||
+        /^log\/.+/.test(path)
+      ) {
+        $('.main-container, .main-right, .main-right-wrapper').addClass('is-article')
+      } else {
+        $('.main-container, .main-right, .main-right-wrapper').removeClass('is-article')
+      }
+    }
+
+    const gray = "none"
+    const setGrayStyle = () => {
+      if (gray === 'none') {
+        return
+      } else if (gray === 'index') {
+        location.pathname === '/' ? $('#gray').show() : $('#gray').hide()
+      } else if (gray === 'all') {
+        $('#gray').show()
+      }
+    }
+    setGrayStyle()
+
+
+    window.onload = function () {
+      checkAndSetArticlePageLayout()
+      setTimeout(() => {
+        $('#load').slideUp()
+        $('#container').slideToggle()
+        setTimeout(() => {
+          initScroll();
+        }, 500)
+      }, 500)
+    }
+    
+    let status = 0
+    // 对所有链接跳转事件绑定pjax容器container
+    $(document).pjax('a[target!=_blank]', '#main-container', {
+      container: '#main-container',
+      fragment: '#main-container',
+      timeout: 8000
+    })
+
+    $(document).on('pjax:start', function() {
+    })
+    $(document).on('pjax:complete', function() {
+      status = 0
+      $('.main-container').addClass('to-up').on('animationend', function() {
+        $(this).removeClass('to-up')
+      })
+      setGrayStyle()
+      checkAndSetArticlePageLayout()
+    })
+    $(document).on('pjax:popstate', function() {
+      status = -1
+      checkAndSetArticlePageLayout()
+    });
+  </script>
+</body>
+</html>
